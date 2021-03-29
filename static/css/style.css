@@ -9,6 +9,7 @@
     background-color: #111; /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
+    margin-top: 50px;
 }
 
 /* The navigation menu links */
@@ -42,13 +43,11 @@
     }
 }
 
-html, body, .player {
-            width: 800px;
-            height: 600px;
-            margin: 50px;
+.player {
+    width: 1200px;
+    height: 600px;
+    margin-left: 180px;
+    margin-right: 350px;
+    margin-top: 50px;
+}
 
-        }
-
-        .player {
-            height: 50%;
-        }
