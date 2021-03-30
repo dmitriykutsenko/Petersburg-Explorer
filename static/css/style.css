@@ -53,15 +53,27 @@ html, body {
     min-width: 800px;
     max-width: 1200px;
     height: 600px;
-    margin-left: 180px;
-    margin-right: 350px;
+    margin-right:350px;
+    margin-left: 170px;
     margin-top: 10px;
     overflow: auto;
+
+}
+
+.wrap_for_btn {
+    min-width: 800px;
+    max-width: 1200px;
+    height: 75px;
+    margin-right:350px;
+    margin-left: 170px;
+    margin-top: 10px;
+    position: relative;
+    padding: 2px;
 }
 
 .complete_round {
     width: 300px;
     height: 60px;
-    margin-left: 1333px;
-    margin-top: 20px;
+    position: absolute;
+    right: 38%
 }
