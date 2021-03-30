@@ -1,3 +1,9 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+
 /* The sidebar menu */
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
@@ -39,16 +45,18 @@
     }
 
     .sidenav a {
-        font-size: 15px;
+        font-size: 18px;
     }
 }
 
 .player {
-    width: 1450px;
-    height: 700px;
+    min-width: 800px;
+    max-width: 1200px;
+    height: 600px;
     margin-left: 180px;
-    margin-right: 20px;
-    margin-top: 20px;
+    margin-right: 350px;
+    margin-top: 10px;
+    overflow: auto;
 }
 
 .complete_round {
