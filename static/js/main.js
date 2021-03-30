@@ -1,4 +1,5 @@
 ymaps.ready(function () {
+
     // Для начала проверим, поддерживает ли плеер браузер пользователя.
     if (!ymaps.panorama.isSupported()) {
         // Если нет, то просто ничего не будем делать.
@@ -6,7 +7,7 @@ ymaps.ready(function () {
     }
 
     // Ищем панораму в переданной точке.
-    ymaps.panorama.locate([55.733685, 37.588264]).done(
+    ymaps.panorama.locate([59.934001, 30.337481]).done(
         function (panoramas) {
             // Убеждаемся, что найдена хотя бы одна панорама.
             if (panoramas.length > 0) {
@@ -17,12 +18,17 @@ ymaps.ready(function () {
                     // от переданной в panorama.locate точки. Выбираем первую,
                     // она будет ближайшей.
                     panoramas[0],
+
                     // Зададим направление взгляда, отличное от значения
                     // по умолчанию.
-                    {direction: [256, 16]}
+                    {
+                        direction: [256, 16],
+                        controls: []
+                    }
                 );
+                window.panorama = player.getPanorama();
                 player.events.add('panoramachange', function () {
-                    alert("Изменилась панорама");
+                    window.panorama = player.getPanorama();
                 });
             }
         },
@@ -31,9 +37,11 @@ ymaps.ready(function () {
             alert(error.message);
         }
     );
-
-
     // Для добавления панорамы на страницу также можно воспользоваться
     // методом panorama.createPlayer. Этот метод ищет ближайщую панораму и
     // в случае успеха создает плеер с найденной панорамой.
 });
+
+function onClickButton() {
+    alert(panorama.getPosition()[0] + " " + panorama.getPosition()[1]);
+}
