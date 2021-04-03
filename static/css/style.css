@@ -1,3 +1,10 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
 /* The sidebar menu */
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
@@ -16,7 +23,7 @@
 .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 20px;
     color: #818181;
     display: block;
 }
@@ -39,21 +46,131 @@
     }
 
     .sidenav a {
-        font-size: 15px;
+        font-size: 18px;
     }
 }
 
 .player {
-    width: 1450px;
-    height: 700px;
-    margin-left: 180px;
-    margin-right: 20px;
-    margin-top: 20px;
+    min-width: 800px;
+    max-width: 2000px;
+    min-height: 700px;
+    max-height: 800px;
+    overflow: auto;
+}
+
+.wrap_for_panorama {
+    position: relative;
+    min-width: 800px;
+    max-width: 2000px;
+    min-height: 700px;
+    max-height: 810px;
+    margin-right: 12px;
+    margin-left: 170px;
+    margin-top: 10px;
+    padding:2px;
+}
+
+.game_status {
+    width: 160px;
+    height: 55px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10000;
+    box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
+    background: #fff;
+    padding: .5rem 1.5rem;
+    border-radius: .25rem;
+}
+
+.destination {
+    position: absolute;
+    right: 180px;
+    top: 15px;
+    z-index: 10000;
+    box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
+    background: #fff;
+    padding: .5rem 3rem;
+    border-radius: .25rem;
+    display: flex;
+    align-items: center;
+    font-size: 16pt;
+}
+
+.destination_name {
+    margin: 0
+}
+
+.round {
+    position: absolute;
+    top: 0;
+    left: 10%;
+    font-size: 16pt;
+}
+
+.round_number {
+    position: absolute;
+    bottom: 0;
+    left: 18%;
+    font-size: 16pt;
+}
+
+.score {
+    position: absolute;
+    top: 0;
+    right: 10%;
+    font-size: 16pt;
+}
+
+.score_amount{
+    position: absolute;
+    bottom: 0;
+    right: 22%;
+    font-size: 16pt;
+}
+
+.wrap_for_btn {
+    min-width: 800px;
+    max-width: 1200px;
+    height: 75px;
+    margin-right:350px;
+    margin-left: 170px;
+    margin-top: 10px;
+    position: relative;
+    padding: 2px;
 }
 
 .complete_round {
-    width: 300px;
+    width: 240px;
     height: 60px;
-    margin-left: 1333px;
-    margin-top: 20px;
+    position: absolute;
+    bottom: 2%;
+    left: 0.4%;
+    border-radius: 35px;
+}
+
+.social {
+    position: relative;
+    width: 130px;
+    height: 40px;
+    top: 0px;
+    left: 45px;
+    z-index: 10000;
+    padding: 2px;
+}
+
+.soc {
+    background-color:#fff;
+    padding: 5px;
+    border-radius: 25%;
+    display: inline-block;
+    margin: 3px;
+}
+
+.soc i{
+    transition: 0.2s linear;
+}
+
+.soc:hover i {
+    transform: scale(1.3);
 }
