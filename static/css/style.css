@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     width: 100%;
+    font-family: 'Montserrat', sans-serif;
 }
 
 
@@ -52,7 +53,7 @@ html, body {
 .player {
     min-width: 800px;
     max-width: 2000px;
-    min-height: 600px;
+    min-height: 700px;
     max-height: 800px;
     overflow: auto;
 }
@@ -61,13 +62,12 @@ html, body {
     position: relative;
     min-width: 800px;
     max-width: 2000px;
-    min-height: 600px;
+    min-height: 700px;
     max-height: 810px;
     margin-right: 12px;
     margin-left: 170px;
     margin-top: 10px;
     padding:2px;
-    /*border: 4px solid #000;*/
 }
 
 .game_status {
@@ -81,6 +81,24 @@ html, body {
     background: #fff;
     padding: .5rem 1.5rem;
     border-radius: .25rem;
+}
+
+.destination {
+    position: absolute;
+    right: 180px;
+    top: 15px;
+    z-index: 10000;
+    box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
+    background: #fff;
+    padding: .5rem 3rem;
+    border-radius: .25rem;
+    display: flex;
+    align-items: center;
+    font-size: 16pt;
+}
+
+.destination_name {
+    margin: 0
 }
 
 .round {
@@ -129,4 +147,30 @@ html, body {
     bottom: 2%;
     left: 0.4%;
     border-radius: 35px;
+}
+
+.social {
+    position: relative;
+    width: 130px;
+    height: 40px;
+    top: 0px;
+    left: 45px;
+    z-index: 10000;
+    padding: 2px;
+}
+
+.soc {
+    background-color:#fff;
+    padding: 5px;
+    border-radius: 25%;
+    display: inline-block;
+    margin: 3px;
+}
+
+.soc i{
+    transition: 0.2s linear;
+}
+
+.soc:hover i {
+    transform: scale(1.3);
 }
