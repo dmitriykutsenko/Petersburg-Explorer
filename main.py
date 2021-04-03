@@ -12,9 +12,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 
 
-@app.route("/",  methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST'])
 def panorama():
-    if request.method =="GET":
+    if request.method == 'GET':
+        print(1)
         db_sess = db_session.create_session()
         clusters = db_sess.query(Cluster)
 
@@ -29,15 +30,16 @@ def panorama():
             panoramas_dict[panorama_from_db.name] = [panorama_from_db.x, panorama_from_db.y]
 
         print(panoramas_dict)
+        print('here')
 
         # вызов js функции для перемещения панорамы в нужную точку
 
         return render_template('panorama.html')
 
-    if request.method == "POST":
+    elif request.method == 'POST':
         # вызов js функции получения координат
         # переключение на следющую панораму
-        pass
+        print(228)
 
 
 def main():
@@ -46,4 +48,4 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+    main()
