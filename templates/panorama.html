@@ -1,41 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="wrap_for_panorama">
-    <div class="game_status">
-        <div class="round">
-            Раунд
+    <head>
+        <script defer>movePanorama({{ x }}, {{ y }})</script>
+    </head>
+    <body>
+    <div class="wrap_for_panorama">
+        <div class="game_status">
+            <div class="round">
+                Раунд
+            </div>
+            <div class="round_number">
+                {{ round }}
+            </div>
+            <div class="score">
+                Очки
+            </div>
+            <div class="score_amount">
+                {{ score }}
+            </div>
         </div>
-        <div class="round_number">
-            0/4
+        <div class="destination">
+            <div class="destination_name">
+                {{ destination }}
+            </div>
         </div>
-        <div class="score">
-            Очки
-        </div>
-        <div class="score_amount">
-            0
-        </div>
+        <div id="player1" class="player"></div>
+
+        <button type="submit" id="complete_btn"
+                class="btn btn-success complete_round pull-right">
+            <i class="fas fa-check-square"></i>
+            Завершить раунд
+        </button>
+
+
     </div>
-    <div class="destination">
-        <div class="destination_name">
-            Тантум Верде Форте
-        </div>
+
+
+    <div class="social">
+
+        <a class="soc" href="#vk">
+            <i class="fab fa-vk "></i>
+        </a>
+        <a class="soc" href="#telegram">
+            <i class="fab fa-telegram"></i>
+        </a>
     </div>
-    <div id="player1" class="player"></div>
-    <button type="button" onclick="onClickButton()" id="complete_btn" class="btn btn-success complete_round pull-right">
-        <i class="fas fa-check-square"></i>
-        Завершить раунд
-    </button>
-</div>
 
-<div class="social">
-
-    <a class="soc" href="#vk">
-        <i class="fab fa-vk "></i>
-    </a>
-    <a class="soc" href="#telegram">
-        <i class="fab fa-telegram"></i>
-    </a>
-</div>
-
+    </body>
 {% endblock %}
+
