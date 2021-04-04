@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="../static/css/form.css">
+    <script src="https://kit.fontawesome.com/4da3397637.js" crossorigin="anonymous"></script>
+</head>
+<h1>Авторизация</h1>
+<form class="form" action="" method="post">
+
+
+    {{ form.hidden_tag() }}
+    <span>
+    <i class="fas fa-envelope"></i>
+    {{ form.email.label }}<br>
+    </span>
+    {{ form.email(class="form-control", type="email") }}<br>
+    {% for error in form.email.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    <p>
+        <span>
+        <i class="fas fa-lock"></i>
+        {{ form.password.label }}<br>
+        </span>
+        {{ form.password(class="form-control", type="password") }}
+        {% for error in form.password.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <p>
+    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    <p>
+        <span>
+            Не зарегистрированы?!? Сделайте это прямо сейчас!
+            <a href="/signup">
+                Зарегистрироваться
+            </a>
+        </span>
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <div>{{ message }}</div>
+</form>
+{% endblock %}
