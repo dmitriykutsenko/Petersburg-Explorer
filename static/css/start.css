@@ -1,0 +1,19 @@
+html { overflow:  hidden; }
+
+.carousel{
+    margin-left: 160px;
+}
+
+.play_button{
+    width: 120px;
+    height: 60px;
+    z-index: 10000;
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

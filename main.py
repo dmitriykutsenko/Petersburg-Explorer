@@ -22,11 +22,12 @@ def load_user(user_id):
 
 @app.route("/")
 def index():
-    return render_template('base.html')
+    return render_template('start.html')
 
 
-@app.route("/panorama")
-def panorama():
+@app.route("/game")
+@login_required
+def game():
     return render_template('panorama.html')
 
 
@@ -62,7 +63,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/panorama")
+            return redirect("/game")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)

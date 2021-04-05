@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
 <head>
     <link rel="stylesheet" href="../static/css/form.css">
@@ -54,7 +53,7 @@
     </p>
     {% endfor %}
 
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form.submit(type="submit", class="btn btn-light submit_btn") }}</p>
     {{message}}
 </form>
 {% endblock %}

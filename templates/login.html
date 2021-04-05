@@ -35,14 +35,14 @@
     <p>
     <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
     <p>
-        <span>
+        <span class="reg_ref">
             Не зарегистрированы?!? Сделайте это прямо сейчас!
-            <a href="/signup">
+            <a class="reg_ref" href="/signup">
                 Зарегистрироваться
             </a>
         </span>
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form.submit(type="submit", class="btn btn-light submit_btn") }}</p>
     <div>{{ message }}</div>
 </form>
 {% endblock %}
