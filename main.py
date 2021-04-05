@@ -36,7 +36,7 @@ def get_panoramas_data():
     print(i1, i2)
     return panoramas_dict, i1, i2
 
-@app.route("/", methods=['POST', 'GET'])
+@app.route("/game", methods=['POST', 'GET'])
 def game_screen():
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data()
@@ -70,8 +70,6 @@ def main():
     db_session.global_init('db/Petersburg.db')
     app.run(port=8000)
 
-
-
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -104,7 +102,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/panorama")
+            return redirect("/")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -117,8 +115,6 @@ def logout():
     logout_user()
     return redirect("/")
 
-
-db_session.global_init("db/explorer.db")
 
 if __name__ == '__main__':
     main()
