@@ -1,9 +1,10 @@
 form.form {
+    color: #fff;
     margin-left: auto;
     margin-right: auto;
     max-width: 450px;
-    background-color: #dfe6e9;
-    border-radius: 5px;
+    background-color: #353b48;
+    border-radius: 15px;
     padding: 10px;
     box-shadow:  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -13,3 +14,19 @@ h1 {
     text-align: center;
 }
 
+.form-control {
+    border-radius: 15px;
+}
+
+.submit_btn{
+    margin-left: calc(50% - 40px);
+    border-radius: 15px;
+}
+
+.reg_ref{
+    color: #fff;
+}
+
+.reg_ref a:hover{
+    color: #dcdde1;
+}

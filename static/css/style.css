@@ -1,9 +1,13 @@
 html, body {
     height: 100%;
     width: 100%;
-    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
 }
 
+.navbar{
+    height:51px;
+    background-color: #212529 !important;
+}
 
 /* The sidebar menu */
 .sidenav {
@@ -18,6 +22,7 @@ html, body {
 
     background-color: #1e272e; /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
+    overflow-y: hidden;
     padding-top: 20px;
     margin-top: 50px;
 }
@@ -177,3 +182,4 @@ html, body {
 .soc:hover i {
     transform: scale(1.3);
 }
+
