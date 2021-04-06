@@ -1,4 +1,4 @@
-ymaps.ready(function () {
+ymaps.ready(function showPanorama(x, y) {
 
     // Для начала проверим, поддерживает ли плеер браузер пользователя.
     if (!ymaps.panorama.isSupported()) {
@@ -7,7 +7,7 @@ ymaps.ready(function () {
     }
 
     // Ищем панораму в переданной точке.
-    ymaps.panorama.locate([59.934001, 30.337481]).done(
+    ymaps.panorama.locate([x, y]).done(
         function (panoramas) {
             // Убеждаемся, что найдена хотя бы одна панорама.
             if (panoramas.length > 0) {

@@ -118,7 +118,5 @@ def logout():
     return redirect("/")
 
 
-db_session.global_init("db/explorer.db")
-
 if __name__ == '__main__':
     main()
