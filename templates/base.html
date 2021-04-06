@@ -19,19 +19,18 @@
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>
 
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Peterburg Explorer</span>
         {% if current_user.is_authenticated %}
-            <a class="navbar-brand" href="/logout">
-                <span>
+            <span><a class="navbar-brand" href="/logout">
                     <i class="fas fa-user-circle"></i>
                     {{ current_user.name }}
-                </span>
             </a>
+                </span>
         {% else %}
         <span>
-            <a href="/login" class="btn btn-secondary btn-sm">Log in</a>
+            <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
         </span>
         {% endif %}
     </div>

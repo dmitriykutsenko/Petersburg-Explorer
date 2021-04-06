@@ -1,9 +1,13 @@
 html, body {
     height: 100%;
     width: 100%;
-    overflow:hidden;
+    overflow: hidden;
 }
 
+.navbar{
+    height:51px;
+    background-color: #212529 !important;
+}
 
 /* The sidebar menu */
 .sidenav {

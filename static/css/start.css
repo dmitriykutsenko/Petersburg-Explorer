@@ -17,3 +17,26 @@ html { overflow:  hidden; }
     justify-content: center;
 }
 
+.carousel-item {
+  height: 100vh;
+  min-height: 300px;
+  background: no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+  /*---Firefox Bug Fix --*/
+.carousel-item {
+  transition: -webkit-transform 0.5s ease;
+  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+  -webkit-backface-visibility: visible;
+          backface-visibility: visible;
+}
+
+.h2 {
+  margin: 60px;
+  text-align: justify;
+
+
