@@ -12,12 +12,15 @@ html, body {
 /* The sidebar menu */
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 160px; /* Set the width of the sidebar */
+    width: 150px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
-    background-color: #111; /* Black */
+
+    /* navbar-color: #d2dae2 */
+
+    background-color: #1e272e; /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     overflow-y: hidden;
     padding-top: 20px;
@@ -96,7 +99,7 @@ html, body {
     box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
     background: #fff;
     padding: .5rem 3rem;
-    border-radius: .25rem;
+    border-radius: .30rem;
     display: flex;
     align-items: center;
     font-size: 16pt;
@@ -151,7 +154,7 @@ html, body {
     position: absolute;
     bottom: 2%;
     left: 0.4%;
-    border-radius: 35px;
+    border-radius: 100px;
 }
 
 .social {
@@ -167,7 +170,7 @@ html, body {
 .soc {
     background-color:#fff;
     padding: 5px;
-    border-radius: 25%;
+    border-radius: 40%;
     display: inline-block;
     margin: 3px;
 }
