@@ -16,44 +16,50 @@ from data.user import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 
-def get_panoramas_data():
+ROUND = 1
+
+
+def get_panoramas_data(cluster_id):
     db_sess = db_session.create_session()
-    clusters = db_sess.query(Cluster)
+    cluster = db_sess.query(Cluster).filter(Cluster.id == cluster_id).first()
 
-    for cluster in clusters:
-        panoramas = cluster.panoramas.split()
+    panoramas = [int(elem) for elem in cluster.panoramas.split()]
 
-    panoramas = [int(elem) for elem in panoramas]
+    print(panoramas)
 
     panoramas_dict = {}
 
-    for panorama_from_db in db_sess.query(Panorama):
-        panoramas_dict[panorama_from_db.name] = [panorama_from_db.x, panorama_from_db.y]
+    for panorama_id in panoramas:
+        for panorama_from_db in db_sess.query(Panorama).filter(Panorama.id == panorama_id):
+            print(panorama_from_db)
+            panoramas_dict[panorama_from_db.name] = [panorama_from_db.x, panorama_from_db.y]
 
     print(panoramas_dict)
 
     i1, i2 = random.sample(range(len(panoramas_dict.keys())), 2)
+
     print(i1, i2)
+
     return panoramas_dict, i1, i2
+
 
 @app.route("/game", methods=['POST', 'GET'])
 def game_screen():
+    global ROUND
     if request.method == 'GET':
-        panoramas_dict, ind1, ind2 = get_panoramas_data()
+        panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
 
-        print(list(panoramas_dict.keys()))
-
-        return render_template('panorama.html', destination=list(panoramas_dict.keys())[ind2],
+        return render_template('panorama.html',
+                               destination=list(panoramas_dict.keys())[ind2],
                                x=panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
-                               y=panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
+                               y=panoramas_dict[list(panoramas_dict.keys())[ind1]][1],
+                               round=ROUND)
 
     elif request.method == 'POST':
-        # вызов js функции получения координат
-        # переключение на следющую панораму при помощи js функции
-        panoramas_dict, ind1, ind2 = get_panoramas_data()
-        return render_template('panorama.html', destination=list(panoramas_dict.keys())[ind2],
-                               x=panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
-                               y=panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
+        ROUND += 1
+
+        return redirect('/game')
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -65,11 +71,16 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
+@app.route("/")
+def index():
+    return render_template('start.html')
+
 
 def main():
     db_session.global_init('db/Petersburg.db')
     app.run(port=8000)
 
+    
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -102,7 +113,9 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            
+            return redirect("/game")
+
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
