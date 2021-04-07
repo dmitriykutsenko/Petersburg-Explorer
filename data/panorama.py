@@ -11,3 +11,6 @@ class Panorama(SqlAlchemyBase):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     x = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
     y = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+
+    def __repr__(self):
+        return f"Панорама {self.name}: {self.x}, {self.y}"
