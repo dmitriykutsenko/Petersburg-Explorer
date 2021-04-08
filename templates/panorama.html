@@ -1,99 +1,107 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-    <script>
-        ymaps.ready(function () {
-        // Для начала проверим, поддерживает ли плеер браузер пользователя.
-        if (!ymaps.panorama.isSupported()) {
-            // Если нет, то просто ничего не будем делать.
-            return;
-        }
-
-        // Ищем панораму в переданной точке.
-        ymaps.panorama.locate([{{ x }}, {{ y }}]).done(
-            function (panoramas) {
-                // Убеждаемся, что найдена хотя бы одна панорама.
-                if (panoramas.length > 0) {
-                    // Создаем плеер с одной из полученных панорам.
-                    window.player = new ymaps.panorama.Player(
-                        'player1',
-                        // Панорамы в ответе отсортированы по расстоянию
-                        // от переданной в panorama.locate точки. Выбираем первую,
-                        // она будет ближайшей.
-                        panoramas[0],
-
-                        // Зададим направление взгляда, отличное от значения
-                        // по умолчанию.
-                        {
-                            direction: [256, 16],
-                            controls: []
-                        }
-                    );
-                    window.panorama = player.getPanorama();
-                    player.events.add('panoramachange', function () {
-                        window.panorama = player.getPanorama();
-                    });
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            ymaps.ready(function () {
+                // Для начала проверим, поддерживает ли плеер браузер пользователя.
+                if (!ymaps.panorama.isSupported()) {
+                    // Если нет, то просто ничего не будем делать.
+                    return;
                 }
-            },
-            function (error) {
-                // Если что-то пошло не так, сообщим об этом пользователю.
-                alert(error.message);
+
+                // Ищем панораму в переданной точке.
+                ymaps.panorama.locate([{{ x }}, {{ y }}]).done(
+                    function (panoramas) {
+                        // Убеждаемся, что найдена хотя бы одна панорама.
+                        if (panoramas.length > 0) {
+                            // Создаем плеер с одной из полученных панорам.
+                            window.player = new ymaps.panorama.Player(
+                                'player1',
+                                // Панорамы в ответе отсортированы по расстоянию
+                                // от переданной в panorama.locate точки. Выбираем первую,
+                                // она будет ближайшей.
+                                panoramas[0],
+
+                                // Зададим направление взгляда, отличное от значения
+                                // по умолчанию.
+                                {
+                                    direction: [256, 16],
+                                    controls: []
+                                }
+                            );
+                            window.panorama = player.getPanorama();
+                            player.events.add('panoramachange', function () {
+                                window.panorama = player.getPanorama();
+                            });
+                        }
+                    },
+                    function (error) {
+                        alert(error.message);
+                    }
+                );
+            });
+
+            function getCoordinates() {
+                const coordinates = JSON.stringify({
+                    "x": panorama.getPosition()[0],
+                    "y": panorama.getPosition()[1]
+                });
+                alert('here');
+                $.ajax({
+                    url: "/catch_coordinates",
+                    type: "POST",
+                    contentType:"application/json",
+                    dataType: "json",
+                    data: coordinates,
+                });
             }
-        );
-        // Для добавления панорамы на страницу также можно воспользоваться
-        // методом panorama.createPlayer. Этот метод ищет ближайщую панораму и
-        // в случае успеха создает плеер с найденной панорамой.
-    });
+        </script>
+    </head>
 
-    function getCoordinates() {
-        alert(panorama.getPosition()[0] + " " + panorama.getPosition()[1]);
-    }
-    </script>
-</head>
+    <body>
+    <div class="wrap_for_panorama">
+        <div class="game_status">
+            <div class="round">
+                Раунд
+            </div>
+            <div class="round_number">
+                {{ round }}
+            </div>
+            <div class="score">
+                Очки
+            </div>
+            <div class="score_amount">
+                {{ score }}
+            </div>
+        </div>
+        <div class="destination">
+            <div class="destination_name">
+                {{ destination }}
+            </div>
+        </div>
+        <div id="player1" class="player"></div>
 
-<body>
-<div class="wrap_for_panorama">
-    <div class="game_status">
-        <div class="round">
-            Раунд
-        </div>
-        <div class="round_number">
-            {{ round }}
-        </div>
-        <div class="score">
-            Очки
-        </div>
-        <div class="score_amount">
-            {{ score }}
-        </div>
+        <form>
+            <button type="submit" id="complete_btn" onclick="getCoordinates()"
+                    class="btn btn-success complete_round pull-right" formmethod="post">
+                <i class="fas fa-check-square"></i>
+                Завершить раунд
+            </button>
+        </form>
     </div>
-    <div class="destination">
-        <div class="destination_name">
-            {{ destination }}
-        </div>
+
+
+    <div class="social">
+        <a class="soc" href="#vk">
+            <i class="fab fa-vk "></i>
+        </a>
+        <a class="soc" href="#telegram">
+            <i class="fab fa-telegram"></i>
+        </a>
     </div>
-    <div id="player1" class="player"></div>
-
-    <form>
-        <button type="submit" id="complete_btn"
-                class="btn btn-success complete_round pull-right" formmethod="post">
-            <i class="fas fa-check-square"></i>
-            Завершить раунд
-        </button>
-    </form>
-</div>
-
-
-<div class="social">
-    <a class="soc" href="#vk">
-        <i class="fab fa-vk "></i>
-    </a>
-    <a class="soc" href="#telegram">
-        <i class="fab fa-telegram"></i>
-    </a>
-</div>
-</body>
+    </body>
 {% endblock %}
 
 
