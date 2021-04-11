@@ -23,6 +23,8 @@ app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 
 ROUND = 1
 
+TOKEN = '9a91352c9040eb78f534e8b0d69cb6c3409aabc434dce6e3fe4283c8f5ff08b7c364c766e22fc0fd157b8'
+
 
 def get_panoramas_data(cluster_id):
     db_sess = db_session.create_session()
@@ -85,7 +87,7 @@ def main():
     db_session.global_init('db/Petersburg.db')
     app.run(port=8000)
 
-    
+
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -118,7 +120,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            
+
             return redirect("/game")
 
         return render_template('login.html',
@@ -133,30 +135,29 @@ def logout():
     logout_user()
     return redirect("/")
 
+
 def send_messages(chat_id, text):
     random_id = random.randint(0, 1000000)
     vk.method('messages.send', {'chat_id': chat_id, 'message': text, 'random_id': random_id})
 
+
 def bot():
     vk_session = vk_api.VkApi(
-        token='9a91352c9040eb78f534e8b0d69cb6c3409aabc434dce6e3fe4283c8f5ff08b7c364c766e22fc0fd157b8')
+        token=TOKEN)
 
     longpoll = VkBotLongPoll(vk_session, 203903199)
 
     for event in longpoll.listen():
-
         if event.type == VkBotEventType.MESSAGE_NEW:
-            vk = vk_session.get_api()
-            vk.messages.send(user_id=event.obj.message['from_id'],
-                             message="Спасибо, что написали нам. Мы обязательно ответим",
-                             random_id=random.randint(0, 2 ** 64))
-            msg = event.text
-            bad_words = ['говно', 'какашка', 'пока']
-            chat_id = event.chat_id
-            if msg in bad_words:
-                send_messages(chat_id, 'Говорите добрые слова!')
-            else:
-                send_messages(chat_id, msg)
+            if event.type.to_me:
+                msg = event.text
+                bad_words = ['говно', 'какашка', 'пока']
+                chat_id = event.chat_id
+                send_messages(chat_id, "Спасибо, что написали нам. Мы обязательно ответим")
+                if msg in bad_words:
+                    send_messages(chat_id, 'Говорите добрые слова!')
+                else:
+                    send_messages(chat_id, msg)
 
 
 if __name__ == '__main__':
