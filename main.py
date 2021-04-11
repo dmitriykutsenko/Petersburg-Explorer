@@ -12,6 +12,7 @@ from forms.login import LoginForm
 
 from data import db_session
 from data.user import User
+from vk_bot import bot
 
 
 app = Flask(__name__)
@@ -134,4 +135,5 @@ def logout():
 
 if __name__ == '__main__':
     main()
+    bot()
 
