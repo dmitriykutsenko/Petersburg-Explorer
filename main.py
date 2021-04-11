@@ -9,12 +9,14 @@ from data.panorama import Panorama
 from data.user import User
 from forms.login import LoginForm
 from forms.register import RegisterForm
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 
 ROUND = 1
 SCORE = 0
+current_coordinates = None
 
 
 def get_panoramas_data(cluster_id):
@@ -40,18 +42,13 @@ def get_panoramas_data(cluster_id):
 
     return panoramas_dict, i1, i2
 
-@app.route("/get_coordinates", methods=['POST'])
+
+@app.route("/catch_coordinates", methods=['PUT'])
 def catch_coordinates():
-    print("content_type: ", request.content_type)
-
-    print("request.json: ", request.json)
-
-    if not request.json:
-        print("bad json format")
-        abort(400)
-    else:
-        print('catched json')
-
+    global current_coordinates
+    if request.method == 'PUT':
+        response = request.get_data().decode()[1:-1].replace('"x":', "").replace(',"y"', '').split(":")
+        current_coordinates = response
 
 
 @app.route("/game", methods=['POST', 'GET'])
@@ -60,14 +57,25 @@ def game_screen():
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
 
+        current_start_panorama_coordinates = panoramas_dict[list(panoramas_dict.keys())[ind1]][0], \
+                                       panoramas_dict[list(panoramas_dict.keys())[ind1]][1]
+
+        current_destination_panorama_coordinates = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
+                                             panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
+
+        print(current_start_panorama_coordinates, current_destination_panorama_coordinates)
+
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
-                               x=panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
-                               y=panoramas_dict[list(panoramas_dict.keys())[ind1]][1],
+                               x=current_start_panorama_coordinates[0],
+                               y=current_start_panorama_coordinates[1],
                                round=ROUND, score=SCORE)
 
     elif request.method == 'POST':
         ROUND += 1
+
+        print("THESE ARE CURRENTS COORDS", current_coordinates)
+        print()
 
         return redirect('/game')
 
@@ -102,7 +110,7 @@ def main():
     db_session.global_init('db/Petersburg.db')
     app.run(port=8000)
 
-    
+
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -135,7 +143,6 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            
             return redirect("/game")
 
         return render_template('login.html',
