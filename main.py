@@ -9,7 +9,10 @@ from data.panorama import Panorama
 from data.user import User
 from forms.login import LoginForm
 from forms.register import RegisterForm
-import json
+
+from score_count import parse_coordinates
+from score_count import parse_destination_coordinates
+from score_count import count_score
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
@@ -17,6 +20,7 @@ app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 ROUND = 1
 SCORE = 0
 current_coordinates = None
+current_destination_coords = None
 
 
 def get_panoramas_data(cluster_id):
@@ -38,8 +42,6 @@ def get_panoramas_data(cluster_id):
 
     i1, i2 = random.sample(range(len(panoramas_dict.keys())), 2)
 
-    print(i1, i2)
-
     return panoramas_dict, i1, i2
 
 
@@ -47,48 +49,37 @@ def get_panoramas_data(cluster_id):
 def catch_coordinates():
     global current_coordinates
     if request.method == 'PUT':
-        response = request.get_data().decode()[1:-1].replace('"x":', "").replace(',"y"', '').split(":")
+        response = request.get_data().decode()[1:-1].replace('"x":', "").replace(',"y"', '').replace(".", "").split(":")
         current_coordinates = response
+        return "caught coordinates"
 
 
 @app.route("/game", methods=['POST', 'GET'])
 def game_screen():
-    global ROUND
+    global ROUND, current_destination_coords
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
 
-        current_start_panorama_coordinates = panoramas_dict[list(panoramas_dict.keys())[ind1]][0], \
-                                       panoramas_dict[list(panoramas_dict.keys())[ind1]][1]
+        current_start_coords = panoramas_dict[list(panoramas_dict.keys())[ind1]][0], \
+                               panoramas_dict[list(panoramas_dict.keys())[ind1]][1]
 
-        current_destination_panorama_coordinates = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
-                                             panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
+        current_destination_coords = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
+                                     panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
 
-        print(current_start_panorama_coordinates, current_destination_panorama_coordinates)
 
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
-                               x=current_start_panorama_coordinates[0],
-                               y=current_start_panorama_coordinates[1],
+                               x=current_start_coords[0],
+                               y=current_start_coords[1],
                                round=ROUND, score=SCORE)
 
     elif request.method == 'POST':
         ROUND += 1
 
-        print("THESE ARE CURRENTS COORDS", current_coordinates)
-        print()
+        count_score(parse_coordinates(current_coordinates),
+                    parse_coordinates(parse_destination_coordinates(current_destination_coords)))
 
         return redirect('/game')
-
-    elif request.method == 'PUT':
-        print("content_type: ", request.content_type)
-
-        print("request.json: ", request.json)
-
-        if not request.json:
-            print("bad json format")
-            abort(400)
-        else:
-            print('catched json')
 
 
 login_manager = LoginManager()
