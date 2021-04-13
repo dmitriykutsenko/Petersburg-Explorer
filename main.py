@@ -10,9 +10,9 @@ from data.user import User
 from forms.login import LoginForm
 from forms.register import RegisterForm
 
-from score_count import parse_coordinates
-from score_count import parse_destination_coordinates
-from score_count import count_score
+from score_scripts.parsers import parse_coordinates
+from score_scripts.parsers import parse_destination_coordinates
+from score_scripts.score_count import count_score
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
@@ -56,7 +56,7 @@ def catch_coordinates():
 
 @app.route("/game", methods=['POST', 'GET'])
 def game_screen():
-    global ROUND, current_destination_coords
+    global ROUND, current_destination_coords, SCORE
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
 
@@ -76,8 +76,11 @@ def game_screen():
     elif request.method == 'POST':
         ROUND += 1
 
-        count_score(parse_coordinates(current_coordinates),
+        SCORE += count_score(parse_coordinates(current_coordinates),
                     parse_coordinates(parse_destination_coordinates(current_destination_coords)))
+
+        if ROUND == 5:
+            return render_template('endgame.html', score=SCORE)
 
         return redirect('/game')
 
