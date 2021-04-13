@@ -18,20 +18,22 @@
 <body>
 
 <nav class="navbar navbar-dark">
-    <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Petersburg Explorer</span>
-        {% if current_user.is_authenticated %}
-            <span><a class="navbar-brand" href="/logout">
-                    <i class="fas fa-user-circle"></i>
-                    {{ current_user.name }}
-            </a>
-                </span>
-        {% else %}
-            <span>
-            <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
-        </span>
-        {% endif %}
+    <div>
+    <a class="navbar-brand" href="/">
+        <img src="../static/img/logo.png" alt="" width="130" height="50">
+    </a>
     </div>
+    {% if current_user.is_authenticated %}
+    <a class="navbar-brand" href="/logout">
+        <i class="fas fa-user-circle"></i>
+        {{ current_user.name }}
+    </a>
+
+    {% else %}
+
+    <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
+
+    {% endif %}
 
 
 </nav>
@@ -41,7 +43,6 @@
     <a href="#services">Техподдержка</a>
     <a href="#contact">О проекте</a>
 </div>
-
 
 
 {% block content %}

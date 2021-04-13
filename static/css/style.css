@@ -4,23 +4,23 @@ html, body {
     overflow: hidden;
 }
 
-.navbar{
-    height:51px;
-    background-color: #212529 !important;
+.navbar {
+    height:60px;
+    background-color: #020d0f !important;
 }
+
 
 /* The sidebar menu */
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 150px; /* Set the width of the sidebar */
+    width: 160px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
+    top: 10px; /* Stay at the top */
     left: 0;
 
-    /* navbar-color: #d2dae2 */
 
-    background-color: #1e272e; /* Black */
+    background-color: #020d0f; /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     overflow-y: hidden;
     padding-top: 20px;
