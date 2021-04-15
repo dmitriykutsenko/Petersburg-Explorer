@@ -1,3 +1,4 @@
+import os
 import random
 
 from flask import Flask, render_template, redirect, request, abort
@@ -102,7 +103,8 @@ def index():
 
 def main():
     db_session.global_init('db/Petersburg.db')
-    app.run(port=8000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
