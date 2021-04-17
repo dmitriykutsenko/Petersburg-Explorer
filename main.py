@@ -4,6 +4,8 @@ import random
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user
 
+from waitress import serve
+
 from data import db_session
 from data.cluster import Cluster
 from data.panorama import Panorama
@@ -67,7 +69,6 @@ def game_screen():
         current_destination_coords = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
                                      panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
 
-
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
                                x=current_start_coords[0],
@@ -78,7 +79,7 @@ def game_screen():
         ROUND += 1
 
         SCORE += count_score(parse_coordinates(current_coordinates),
-                    parse_coordinates(parse_destination_coordinates(current_destination_coords)))
+                             parse_coordinates(parse_destination_coordinates(current_destination_coords)))
 
         if ROUND == 5:
             return render_template('endgame.html', score=SCORE)
@@ -103,8 +104,7 @@ def index():
 
 def main():
     db_session.global_init('db/Petersburg.db')
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    serve(app, host='0.0.0.0', port=5000)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
