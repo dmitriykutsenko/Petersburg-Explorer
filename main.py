@@ -1,22 +1,29 @@
-from flask import Flask, render_template, redirect, make_response, request
-from flask_login import LoginManager, login_user, login_required, logout_user, \
-    current_user
-from werkzeug.exceptions import abort
+import os
+import random
 
+from flask import Flask, render_template, redirect, request, abort
+from flask_login import LoginManager, login_user, login_required, logout_user
+
+from waitress import serve
+
+from data import db_session
 from data.cluster import Cluster
 from data.panorama import Panorama
 from data.user import User
-import random
-from forms.register import RegisterForm
 from forms.login import LoginForm
+from forms.register import RegisterForm
 
-from data import db_session
-from data.user import User
+from score_scripts.parsers import parse_coordinates
+from score_scripts.parsers import parse_destination_coordinates
+from score_scripts.score_count import count_score
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 
 ROUND = 1
+SCORE = 0
+current_coordinates = None
+current_destination_coords = None
 
 
 def get_panoramas_data(cluster_id):
@@ -38,25 +45,44 @@ def get_panoramas_data(cluster_id):
 
     i1, i2 = random.sample(range(len(panoramas_dict.keys())), 2)
 
-    print(i1, i2)
-
     return panoramas_dict, i1, i2
+
+
+@app.route("/catch_coordinates", methods=['PUT'])
+def catch_coordinates():
+    global current_coordinates
+    if request.method == 'PUT':
+        response = request.get_data().decode()[1:-1].replace('"x":', "").replace(',"y"', '').replace(".", "").split(":")
+        current_coordinates = response
+        return "caught coordinates"
 
 
 @app.route("/game", methods=['POST', 'GET'])
 def game_screen():
-    global ROUND
+    global ROUND, current_destination_coords, SCORE
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
 
+        current_start_coords = panoramas_dict[list(panoramas_dict.keys())[ind1]][0], \
+                               panoramas_dict[list(panoramas_dict.keys())[ind1]][1]
+
+        current_destination_coords = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
+                                     panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
+
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
-                               x=panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
-                               y=panoramas_dict[list(panoramas_dict.keys())[ind1]][1],
-                               round=ROUND)
+                               x=current_start_coords[0],
+                               y=current_start_coords[1],
+                               round=ROUND, score=SCORE)
 
     elif request.method == 'POST':
         ROUND += 1
+
+        SCORE += count_score(parse_coordinates(current_coordinates),
+                             parse_coordinates(parse_destination_coordinates(current_destination_coords)))
+
+        if ROUND == 5:
+            return render_template('endgame.html', score=SCORE)
 
         return redirect('/game')
 
@@ -78,9 +104,9 @@ def index():
 
 def main():
     db_session.global_init('db/Petersburg.db')
-    app.run(port=8000)
+    serve(app, host='0.0.0.0', port=5000)
 
-    
+
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -113,7 +139,6 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            
             return redirect("/game")
 
         return render_template('login.html',
