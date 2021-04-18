@@ -1,6 +1,6 @@
 import random
 
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, session
 from flask_login import LoginManager, login_user, login_required, logout_user
 
 from data import db_session
@@ -25,11 +25,6 @@ load_dotenv(dotenv_path='email_scripts/.env')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
-
-ROUND = 1
-SCORE = 0
-current_coordinates = None
-current_destination_coords = None
 
 
 def get_panoramas_data(cluster_id):
@@ -56,39 +51,39 @@ def get_panoramas_data(cluster_id):
 
 @app.route("/catch_coordinates", methods=['PUT'])
 def catch_coordinates():
-    global current_coordinates
     if request.method == 'PUT':
-        response = request.get_data().decode()[1:-1].replace('"x":', "").replace(',"y"', '').replace(".", "").split(":")
-        current_coordinates = response
+        response = request.get_data().decode()[1:-1].replace('"x":', "").\
+            replace(',"y"', '').replace(".", "").split(":")
+        session['Current Coordinates'] = response
         return "caught coordinates"
 
 
 @app.route("/game", methods=['POST', 'GET'])
 def game_screen():
-    global ROUND, current_destination_coords, SCORE
     if request.method == 'GET':
-        panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
+        panoramas_dict, ind1, ind2 = get_panoramas_data(session['Round'])
 
-        current_start_coords = panoramas_dict[list(panoramas_dict.keys())[ind1]][0], \
-                               panoramas_dict[list(panoramas_dict.keys())[ind1]][1]
+        current_start_coords = (panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
+                                panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
 
-        current_destination_coords = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
-                                     panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
+        session['Current Destination Coordinates'] = [panoramas_dict[list(panoramas_dict.keys())[ind2]][0],
+                                                      panoramas_dict[list(panoramas_dict.keys())[ind2]][1]]
 
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
                                x=current_start_coords[0],
                                y=current_start_coords[1],
-                               round=ROUND, score=SCORE)
+                               round=session['Round'], score=session['Score'])
 
     elif request.method == 'POST':
-        ROUND += 1
+        session['Round'] += 1
 
-        SCORE += count_score(parse_coordinates(current_coordinates),
-                             parse_coordinates(parse_destination_coordinates(current_destination_coords)))
+        session['Score'] += count_score(parse_coordinates(session['Current Coordinates']),
+                                        parse_coordinates(parse_destination_coordinates(
+                                            session['Current Destination Coordinates'])))
 
-        if ROUND == 5:
-            return render_template('endgame.html', score=SCORE)
+        if session['Round'] == 5:
+            return render_template('endgame.html', score=session['Score'])
 
         return redirect('/game')
 
@@ -105,6 +100,11 @@ def load_user(user_id):
 
 @app.route("/")
 def index():
+    session['Round'] = 1
+    session['Score'] = 0
+    session['Current Destination Coordinates'] = 0
+    session['Current Coordinates'] = 0
+
     return render_template('start.html')
 
 
@@ -135,26 +135,14 @@ def register():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-
         verification_code = generate_code()
 
-        if send_email(form.email.data, 'Регистрация в Petersburg Explorer',
-                      'Вы сейчас регистрируетесь в онлайн-игре Petersburg Explorer.'
-                      'Код для продолжения регистрации: {}'.format(verification_code)):
-            print("ПИСЬМО ОТПРАВЛЕНО")
+        email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
+                     "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
 
-        else:
-            print("ПИСЬМО НЕ ОТПРАВЛЕНО")
+        if send_email(form.email.data, 'Регистрация в Petersburg Explorer', email_text):
+            return redirect('/email_verification')
 
-        user = User(
-            name=form.name.data,
-            email=form.email.data,
-        )
-
-        user.set_password(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
-        return redirect('/email_verification')
     return render_template('register.html', title='Регистрация', form=form)
 
 
