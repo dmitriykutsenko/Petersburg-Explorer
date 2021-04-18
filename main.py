@@ -1,3 +1,4 @@
+import os
 import random
 
 from flask import Flask, render_template, redirect, request, abort
@@ -108,16 +109,9 @@ def index():
     return render_template('start.html')
 
 
-def main():
-    db_session.global_init('db/Petersburg.db')
-    app.run(port=8000)
-
-
 @app.route('/email_verification', methods=['GET', 'POST'])
 def verify_email():
     form = EmailVerificationForm()
-
-
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -177,6 +171,11 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+def main():
+    port = int(os.environ.get('PORT', 5000))
+    app.run('0.0.0.0', port=port)
 
 
 if __name__ == '__main__':
