@@ -66,7 +66,6 @@ def game_screen():
         current_destination_coords = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
                                      panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
 
-
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
                                x=current_start_coords[0],
@@ -77,7 +76,7 @@ def game_screen():
         ROUND += 1
 
         SCORE += count_score(parse_coordinates(current_coordinates),
-                    parse_coordinates(parse_destination_coordinates(current_destination_coords)))
+                             parse_coordinates(parse_destination_coordinates(current_destination_coords)))
 
         if ROUND == 5:
             return render_template('endgame.html', score=SCORE)
