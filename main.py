@@ -7,12 +7,21 @@ from data import db_session
 from data.cluster import Cluster
 from data.panorama import Panorama
 from data.user import User
+
 from forms.login import LoginForm
 from forms.register import RegisterForm
+from forms.email_verification import EmailVerificationForm
 
 from score_scripts.parsers import parse_coordinates
 from score_scripts.parsers import parse_destination_coordinates
 from score_scripts.score_count import count_score
+
+from dotenv import load_dotenv
+
+from email_scripts.mail_sender import send_email
+from email_scripts.code_generator import generate_code
+
+load_dotenv(dotenv_path='email_scripts/.env')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
@@ -104,6 +113,15 @@ def main():
     app.run(port=8000)
 
 
+@app.route('/email_verification', methods=['GET', 'POST'])
+def email_verification():
+    form = EmailVerificationForm()
+    if form.validate_on_submit():
+        return redirect('/login')
+
+    return render_template('email_verification.html', title='Подтверждение', form=form)
+
+
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -117,14 +135,26 @@ def register():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
+
+        verification_code = generate_code()
+
+        if send_email(form.email.data, 'Регистрация в Petersburg Explorer',
+                      'Вы сейчас регистрируетесь в онлайн-игре Petersburg Explorer.'
+                      'Код для продолжения регистрации: {}'.format(verification_code)):
+            print("ПИСЬМО ОТПРАВЛЕНО")
+
+        else:
+            print("ПИСЬМО НЕ ОТПРАВЛЕНО")
+
         user = User(
             name=form.name.data,
             email=form.email.data,
         )
+
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        return redirect('/email_verification')
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -136,7 +166,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/game")
+            return redirect("/")
 
         return render_template('login.html',
                                message="Неправильный логин или пароль",
