@@ -4,5 +4,5 @@ from wtforms.validators import DataRequired
 
 
 class EmailVerificationForm(FlaskForm):
-    code = PasswordField('Пароль', validators=[DataRequired()])
+    code = PasswordField('Код', validators=[DataRequired()])
     submit = SubmitField('Подтвердить регистрацию')

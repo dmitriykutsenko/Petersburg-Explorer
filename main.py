@@ -114,10 +114,12 @@ def main():
 
 
 @app.route('/email_verification', methods=['GET', 'POST'])
-def verify_email():
+def email_verification():
     form = EmailVerificationForm()
+    if form.validate_on_submit():
+        return redirect('/login')
 
-
+    return render_template('email_verification.html', title='Подтверждение', form=form)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -152,7 +154,7 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        return redirect('/email_verification')
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -164,7 +166,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/game")
+            return redirect("/start")
 
         return render_template('login.html',
                                message="Неправильный логин или пароль",
