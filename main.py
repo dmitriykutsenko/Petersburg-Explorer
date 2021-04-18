@@ -1,3 +1,4 @@
+import os
 import random
 
 from flask import Flask, render_template, redirect, request, session
@@ -52,7 +53,7 @@ def get_panoramas_data(cluster_id):
 @app.route("/catch_coordinates", methods=['PUT'])
 def catch_coordinates():
     if request.method == 'PUT':
-        response = request.get_data().decode()[1:-1].replace('"x":', "").\
+        response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
         session['Current Coordinates'] = response
         return "caught coordinates"
@@ -108,16 +109,25 @@ def index():
     return render_template('start.html')
 
 
-def main():
-    db_session.global_init('db/Petersburg.db')
-    app.run(port=8000)
-
-
 @app.route('/email_verification', methods=['GET', 'POST'])
 def email_verification():
     form = EmailVerificationForm()
     if form.validate_on_submit():
-        return redirect('/login')
+        db_sess = db_session.create_session()
+        if session['Verification Code'] == form.code.data:
+            user = User(
+                name=session['User Nickname'],
+                email=session['User Email'],
+            )
+            user.set_password(session['User Password'])
+            db_sess.add(user)
+            db_sess.commit()
+
+            return redirect('/login')
+
+        else:
+            return render_template('email_verification.html', title='Подтверждение', form=form,
+                                   message='Неверный код подтверждения')
 
     return render_template('email_verification.html', title='Подтверждение', form=form)
 
@@ -135,12 +145,18 @@ def register():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
+
         verification_code = generate_code()
 
         email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
                      "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
 
         if send_email(form.email.data, 'Регистрация в Petersburg Explorer', email_text):
+            session['Verification Code'] = verification_code
+            session['User Email'] = form.email.data
+            session['User Nickname'] = form.name.data
+            session['User Password'] = form.password.data
+
             return redirect('/email_verification')
 
     return render_template('register.html', title='Регистрация', form=form)
@@ -167,6 +183,12 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+def main():
+    db_session.global_init('db/Petersburg.db')
+    port = int(os.environ.get('PORT', 5000))
+    app.run('0.0.0.0', port=port)
 
 
 if __name__ == '__main__':
