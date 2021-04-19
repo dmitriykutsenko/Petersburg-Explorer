@@ -59,7 +59,7 @@ def catch_coordinates():
         return "caught coordinates"
 
 
-@app.route("/game", methods=['POST', 'GET'])
+@app.route("/game/", methods=['POST', 'GET'])
 def game_screen():
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(session['Round'])
@@ -187,8 +187,7 @@ def logout():
 
 def main():
     db_session.global_init('db/Petersburg.db')
-    port = int(os.environ.get('PORT', 5000))
-    app.run('0.0.0.0', port=port)
+    app.run('127.0.0.1', port=8080)
 
 
 if __name__ == '__main__':
