@@ -50,7 +50,7 @@ def get_panoramas_data(cluster_id):
     return panoramas_dict, i1, i2
 
 
-@app.route("/catch_coordinates", methods=['PUT'])
+@app.route("/catch_coordinates/", methods=['PUT'])
 def catch_coordinates():
     if request.method == 'PUT':
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
