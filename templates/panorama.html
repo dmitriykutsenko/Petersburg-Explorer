@@ -49,7 +49,7 @@
                     "y": panorama.getPosition()[1]
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/catch_coordinates",
+                    url: "/catch_coordinates/",
                     type: "PUT",
                     dataType: "json",
                     data: coordinates,

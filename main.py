@@ -50,7 +50,7 @@ def get_panoramas_data(cluster_id):
     return panoramas_dict, i1, i2
 
 
-@app.route("/catch_coordinates", methods=['PUT'])
+@app.route("/catch_coordinates/", methods=['PUT'])
 def catch_coordinates():
     if request.method == 'PUT':
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
@@ -59,7 +59,7 @@ def catch_coordinates():
         return "caught coordinates"
 
 
-@app.route("/game", methods=['POST', 'GET'])
+@app.route("/game/", methods=['POST', 'GET'])
 def game_screen():
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(session['Round'])
@@ -86,7 +86,7 @@ def game_screen():
         if session['Round'] == 5:
             return render_template('endgame.html', score=session['Score'])
 
-        return redirect('/game')
+        return redirect('/game/')
 
 
 login_manager = LoginManager()
