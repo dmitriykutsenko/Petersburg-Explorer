@@ -12,6 +12,7 @@ load_dotenv(dotenv_path='email_scripts/.env')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
 
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -28,7 +29,8 @@ app.register_blueprint(game_blueprint.blueprint)
 
 def main():
     db_session.global_init('db/Petersburg.db')
-    app.run('127.0.0.1', port='5000')
+    app.run('127.0.0.1', port=8080)
+
 
 
 if __name__ == '__main__':
