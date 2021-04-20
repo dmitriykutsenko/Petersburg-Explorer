@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, session, request
 
-from get_panoramas_data import get_panoramas_data
+from score_scripts.get_panoramas_data import get_panoramas_data
 from score_scripts.parsers import parse_coordinates
 from score_scripts.parsers import parse_destination_coordinates
 from score_scripts.score_count import count_score
