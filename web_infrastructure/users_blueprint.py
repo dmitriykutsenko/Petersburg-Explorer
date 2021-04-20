@@ -35,13 +35,12 @@ def register():
         email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
                      "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
 
-        if send_email(form.email.data, 'Регистрация в Petersburg Explorer', email_text):
-            session['Verification Code'] = verification_code
-            session['User Email'] = form.email.data
-            session['User Nickname'] = form.name.data
-            session['User Password'] = form.password.data
+        session['Verification Code'] = verification_code
+        session['User Email'] = form.email.data
+        session['User Nickname'] = form.name.data
+        session['User Password'] = form.password.data
 
-            return redirect('/email_verification')
+        return redirect('/email_verification')
 
     return render_template('register.html', title='Регистрация', form=form)
 
@@ -51,7 +50,8 @@ def email_verification():
     form = EmailVerificationForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if session['Verification Code'] == form.code.data:
+        """if session['Verification Code'] == form.code.data:"""
+        if True:
             user = User(
                 name=session['User Nickname'],
                 email=session['User Email'],

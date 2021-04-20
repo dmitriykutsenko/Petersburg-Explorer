@@ -9,6 +9,6 @@ class GameSession(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("user.id"))
+                                sqlalchemy.ForeignKey("users.id"))
     date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
     score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
