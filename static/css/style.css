@@ -1,66 +1,14 @@
 html, body {
     height: 100%;
     width: 100%;
-    overflow: hidden;
 }
 
 .navbar{
-    height:51px;
-    background-color: #212529 !important;
-}
-
-/* The sidebar menu */
-.sidenav {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 150px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    left: 0;
-
-    /* navbar-color: #d2dae2 */
-
-    background-color: #1e272e; /* Black */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    overflow-y: hidden;
-    padding-top: 20px;
-    margin-top: 50px;
-}
-
-/* The navigation menu links */
-.sidenav a {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 20px;
-    color: #818181;
-    display: block;
-}
-
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-    color: #f1f1f1;
-}
-
-/* Style page content */
-.main {
-    margin-left: 160px; /* Same as the width of the sidebar */
-    padding: 0px 10px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-    .sidenav {
-        padding-top: 15px;
-    }
-
-    .sidenav a {
-        font-size: 18px;
-    }
+    background-color: #000;
 }
 
 .player {
-    min-width: 800px;
-    max-width: 2000px;
+    max-width: 100%;
     min-height: 700px;
     max-height: 800px;
     overflow: auto;
@@ -68,12 +16,11 @@ html, body {
 
 .wrap_for_panorama {
     position: relative;
-    min-width: 800px;
-    max-width: 2000px;
+    max-width: 100%;
     min-height: 700px;
     max-height: 810px;
     margin-right: 12px;
-    margin-left: 170px;
+    margin-left: 10px;
     margin-top: 10px;
     padding:2px;
 }
@@ -84,7 +31,7 @@ html, body {
     position: absolute;
     right: 10px;
     top: 10px;
-    z-index: 10000;
+    z-index: 99;
     box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
     background: #fff;
     padding: .5rem 1.5rem;
@@ -95,7 +42,7 @@ html, body {
     position: absolute;
     right: 180px;
     top: 15px;
-    z-index: 10000;
+    z-index: 99;
     box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
     background: #fff;
     padding: .5rem 3rem;
@@ -157,29 +104,57 @@ html, body {
     border-radius: 100px;
 }
 
-.social {
+.dropdown-menu{
+    z-index: 100;
+}
+
+.social-menu ul {
+    position: absolute;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+.social-menu ul li {
+    list-style: none;
+    margin: 0 10px;
+}
+
+
+.social-menu ul li i{
+    color: #000000;
+    font-size: 25px;
+    line-height: 40px;
+    transition: .5s;
+}
+.social-menu ul li i:hover {
+    color: #ffffff;
+}
+.social-menu ul li a {
     position: relative;
-    width: 130px;
+    display: block;
+    width: 40px;
     height: 40px;
-    top: 0px;
-    left: 45px;
-    z-index: 10000;
-    padding: 2px;
+    border-radius: 50%;
+    background-color: white;
+    text-align: center;
+    transition: 0.5s;
+    transform: translate(0,0px);
+    box-shadow: 0px 7px 5px rgba(0, 0, 0, 0.5);
 }
-
-.soc {
-    background-color:#fff;
-    padding: 5px;
-    border-radius: 40%;
-    display: inline-block;
-    margin: 3px;
+.social-menu ul li a:hover {
+    transform: rotate(0deg) skew(0deg) translate(0, -10px);
 }
-
-.soc i{
-    transition: 0.2s linear;
+.social-menu ul li:nth-child(1) a:hover {
+    background-color: #3b5999;
 }
-
-.soc:hover i {
-    transform: scale(1.3);
+.social-menu ul li:nth-child(2) a:hover {
+    background-color: #55acee;
+}
+.social-menu ul li:nth-child(3) a:hover {
+    background-color: #e4405f;
 }
 

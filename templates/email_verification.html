@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="../static/css/form.css">
+    <script src="https://kit.fontawesome.com/4da3397637.js" crossorigin="anonymous"></script>
+</head>
+<h1>Подтверждение</h1>
+<form class="form" action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        <span>
+        <i class="fas fa-user-check"></i>
+        {{ form.code.label }}<br>
+        </span>
+        {{ form.code(class="form-control", type="text") }}
+        {% for error in form.code.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <p>
+
+    <p>{{ form.submit(type="submit", class="btn btn-outline-light submit_btn") }}</p>
+    <div>{{ message }}</div>
+</form>
+{% endblock %}
