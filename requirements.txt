@@ -6,7 +6,9 @@ greenlet==1.0.0
 itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
-SQLAlchemy==1.4.8
+python-dotenv==0.17.0
+SQLAlchemy==1.4.9
+waitress==2.0.0
 Werkzeug==1.0.1
 WTForms==2.3.3
-waitress~=2.0.0
+SQLAlchemy-serializer

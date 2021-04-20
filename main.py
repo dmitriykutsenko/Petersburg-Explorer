@@ -1,29 +1,31 @@
 import os
 import random
 
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, session
 from flask_login import LoginManager, login_user, login_required, logout_user
-
-from waitress import serve
 
 from data import db_session
 from data.cluster import Cluster
 from data.panorama import Panorama
 from data.user import User
+
 from forms.login import LoginForm
 from forms.register import RegisterForm
+from forms.email_verification import EmailVerificationForm
 
 from score_scripts.parsers import parse_coordinates
 from score_scripts.parsers import parse_destination_coordinates
 from score_scripts.score_count import count_score
 
+from dotenv import load_dotenv
+
+from email_scripts.mail_sender import send_email
+from email_scripts.code_generator import generate_code
+
+load_dotenv(dotenv_path='email_scripts/.env')
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
-
-ROUND = 1
-SCORE = 0
-current_coordinates = None
-current_destination_coords = None
 
 
 def get_panoramas_data(cluster_id):
@@ -48,41 +50,41 @@ def get_panoramas_data(cluster_id):
     return panoramas_dict, i1, i2
 
 
-@app.route("/catch_coordinates", methods=['PUT'])
+@app.route("/catch_coordinates/", methods=['PUT'])
 def catch_coordinates():
-    global current_coordinates
     if request.method == 'PUT':
-        response = request.get_data().decode()[1:-1].replace('"x":', "").replace(',"y"', '').replace(".", "").split(":")
-        current_coordinates = response
+        response = request.get_data().decode()[1:-1].replace('"x":', ""). \
+            replace(',"y"', '').replace(".", "").split(":")
+        session['Current Coordinates'] = response
         return "caught coordinates"
 
 
-@app.route("/game", methods=['POST', 'GET'])
+@app.route("/game/", methods=['POST', 'GET'])
 def game_screen():
-    global ROUND, current_destination_coords, SCORE
     if request.method == 'GET':
-        panoramas_dict, ind1, ind2 = get_panoramas_data(ROUND)
+        panoramas_dict, ind1, ind2 = get_panoramas_data(session['Round'])
 
-        current_start_coords = panoramas_dict[list(panoramas_dict.keys())[ind1]][0], \
-                               panoramas_dict[list(panoramas_dict.keys())[ind1]][1]
+        current_start_coords = (panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
+                                panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
 
-        current_destination_coords = panoramas_dict[list(panoramas_dict.keys())[ind2]][0], \
-                                     panoramas_dict[list(panoramas_dict.keys())[ind2]][1]
+        session['Current Destination Coordinates'] = [panoramas_dict[list(panoramas_dict.keys())[ind2]][0],
+                                                      panoramas_dict[list(panoramas_dict.keys())[ind2]][1]]
 
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
                                x=current_start_coords[0],
                                y=current_start_coords[1],
-                               round=ROUND, score=SCORE)
+                               round=session['Round'], score=session['Score'])
 
     elif request.method == 'POST':
-        ROUND += 1
+        session['Round'] += 1
 
-        SCORE += count_score(parse_coordinates(current_coordinates),
-                             parse_coordinates(parse_destination_coordinates(current_destination_coords)))
+        session['Score'] += count_score(parse_coordinates(session['Current Coordinates']),
+                                        parse_coordinates(parse_destination_coordinates(
+                                            session['Current Destination Coordinates'])))
 
-        if ROUND == 5:
-            return render_template('endgame.html', score=SCORE)
+        if session['Round'] == 5:
+            return render_template('endgame.html', score=session['Score'])
 
         return redirect('/game')
 
@@ -99,12 +101,35 @@ def load_user(user_id):
 
 @app.route("/")
 def index():
+    session['Round'] = 1
+    session['Score'] = 0
+    session['Current Destination Coordinates'] = 0
+    session['Current Coordinates'] = 0
+
     return render_template('start.html')
 
 
-def main():
-    db_session.global_init('db/Petersburg.db')
-    serve(app, host='0.0.0.0', port=5000)
+@app.route('/email_verification', methods=['GET', 'POST'])
+def email_verification():
+    form = EmailVerificationForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if session['Verification Code'] == form.code.data:
+            user = User(
+                name=session['User Nickname'],
+                email=session['User Email'],
+            )
+            user.set_password(session['User Password'])
+            db_sess.add(user)
+            db_sess.commit()
+
+            return redirect('/login')
+
+        else:
+            return render_template('email_verification.html', title='Подтверждение', form=form,
+                                   message='Неверный код подтверждения')
+
+    return render_template('email_verification.html', title='Подтверждение', form=form)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -120,14 +145,20 @@ def register():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        user = User(
-            name=form.name.data,
-            email=form.email.data,
-        )
-        user.set_password(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
-        return redirect('/login')
+
+        verification_code = generate_code()
+
+        email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
+                     "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
+
+        if send_email(form.email.data, 'Регистрация в Petersburg Explorer', email_text):
+            session['Verification Code'] = verification_code
+            session['User Email'] = form.email.data
+            session['User Nickname'] = form.name.data
+            session['User Password'] = form.password.data
+
+            return redirect('/email_verification')
+
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -139,7 +170,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/game")
+            return redirect("/")
 
         return render_template('login.html',
                                message="Неправильный логин или пароль",
@@ -152,6 +183,11 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+def main():
+    db_session.global_init('db/Petersburg.db')
+    app.run('127.0.0.1', port=8080)
 
 
 if __name__ == '__main__':
