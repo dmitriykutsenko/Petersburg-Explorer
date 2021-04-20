@@ -2,7 +2,35 @@
 
 {% block content %}
 
-    <h1>ИГРА ОКОНЧЕНА</h1>
-    <h2>ИТОГОВЫЙ СЧЕТ: {{ score }}</h2>
+<head>
+    <link rel="stylesheet" href="../static/css/end.css" type="text/css">
+</head>
+
+<h1>Игра окончена</h1>
+<h2>Итоговый счёт: {{ score }}</h2>
+{% set percent = score/4000 * 100 %}
+<div class="bar">
+  <div class="meter">
+    <span style="width: {{ percent }}%"></span>
+  </div>
+</div>
+
+<a href="/game/" class="btn btn-outline-light play_button">
+    Главное меню
+</a>
+
+<script type="text/javascript">
+    $(".meter > span").each(function () {
+  $(this)
+    .data("origWidth", $(this).width())
+    .width(0)
+    .animate(
+      {
+        width: $(this).data("origWidth")
+      },
+      1200
+    );
+});
+</script>
 
 {% endblock %}
