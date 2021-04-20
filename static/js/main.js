@@ -1,4 +1,4 @@
-ymaps.ready(function () {
+ymaps.ready(function showPanorama(x, y) {
 
     // Для начала проверим, поддерживает ли плеер браузер пользователя.
     if (!ymaps.panorama.isSupported()) {
@@ -7,12 +7,12 @@ ymaps.ready(function () {
     }
 
     // Ищем панораму в переданной точке.
-    ymaps.panorama.locate([59.934001, 30.337481]).done(
+    ymaps.panorama.locate([x, y]).done(
         function (panoramas) {
             // Убеждаемся, что найдена хотя бы одна панорама.
             if (panoramas.length > 0) {
                 // Создаем плеер с одной из полученных панорам.
-                var player = new ymaps.panorama.Player(
+                window.player = new ymaps.panorama.Player(
                     'player1',
                     // Панорамы в ответе отсортированы по расстоянию
                     // от переданной в panorama.locate точки. Выбираем первую,
@@ -42,6 +42,10 @@ ymaps.ready(function () {
     // в случае успеха создает плеер с найденной панорамой.
 });
 
-function onClickButton() {
+function getCoordinates() {
     alert(panorama.getPosition()[0] + " " + panorama.getPosition()[1]);
+}
+
+function movePanorama(x, y) {
+    player.moveTo([x, y]);
 }

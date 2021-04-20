@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../static/css/start.css">
+
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+
+        <div class="carousel-item active" style="background-image: url('../static/img/back1.jpg')">
+        </div>
+        <div class="carousel-item" style="background-image: url('../static/img/back2.jpg')">
+        </div>
+        <div class="carousel-item" style="background-image: url('../static/img/back3.jpg')">
+        </div>
+        <div class="carousel-item" style="background-image: url('../static/img/back4.jpg')">
+        </div>
+        <div class="carousel-item" style="background-image: url('../static/img/back5.jpg')">
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+
+</div>
+
+{% if current_user.is_authenticated %}
+<a href="/game" class="btn btn-outline-light play_button">
+    Играть
+</a>
+{% else %}
+<a href="/login" class="btn btn-outline-light play_button">
+    Играть
+</a>
+{% endif %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
