@@ -48,11 +48,12 @@
                     "x": panorama.getPosition()[0],
                     "y": panorama.getPosition()[1]
                 });
+
                 $.ajax({
-                    url: "/catch_coordinates/",
-                    type: "PUT",
+                    url: "/game/",
+                    type: "POST",
                     dataType: "json",
-                    data: coordinates,
+                    data: coordinates
                 });
             }
         </script>
@@ -83,7 +84,7 @@
 
         <form>
             <button type="submit" id="complete_btn" onclick="getCoordinates()"
-                    class="btn btn-success complete_round pull-right" formmethod="post">
+                    class="btn btn-success complete_round pull-right">
                 <i class="fas fa-check-square"></i>
                 Завершить раунд
             </button>
