@@ -24,6 +24,7 @@ def catch_coordinates():
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
         session['Current Coordinates'] = response
+        session.modified = True
         return "caught coordinates"
 
 
@@ -44,6 +45,7 @@ def game_screen():
                                y=current_start_coords[1],
                                round=session['Round'], score=session['Score'])
 
+        session.modified = True
     elif request.method == 'POST':
         session['Round'] += 1
 
@@ -53,5 +55,7 @@ def game_screen():
 
         if session['Round'] == 5:
             return render_template('endgame.html', score=session['Score'])
+
+        session.modified = True
 
         return redirect('/game/')
