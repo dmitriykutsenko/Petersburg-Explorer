@@ -14,6 +14,8 @@ def index():
     session['Score'] = 0
     session['Current Destination Coordinates'] = -1
     session['Current Coordinates'] = -1
+    session.permanent = False
+    session.modified = True
 
     return render_template('start.html')
 
@@ -41,10 +43,13 @@ def game_screen():
             replace(',"y"', '').replace(".", "").split(":")
 
         session['Round'] += 1
+        print("ROUND UPDATED")
 
         session['Score'] += count_score(parse_coordinates(response),
                                         parse_coordinates(parse_destination_coordinates(
                                             session['Current Destination Coordinates'])))
+
+        session.modified = True
 
         if session['Round'] == 5:
             return render_template('endgame.html', score=session['Score'])
