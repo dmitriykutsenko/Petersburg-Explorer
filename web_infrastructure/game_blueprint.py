@@ -25,6 +25,7 @@ def catch_coordinates():
             replace(',"y"', '').replace(".", "").split(":")
         session['Current Coordinates'] = response
         session.modified = True
+        print("CAUGHT COORDINATES", session['Current Coordinates'])
         return "caught coordinates"
 
 

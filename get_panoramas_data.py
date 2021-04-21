@@ -10,16 +10,11 @@ def get_panoramas_data(cluster_id):
 
     panoramas = [int(elem) for elem in cluster.panoramas.split()]
 
-    print(panoramas)
-
     panoramas_dict = {}
 
     for panorama_id in panoramas:
         for panorama_from_db in db_sess.query(Panorama).filter(Panorama.id == panorama_id):
-            print(panorama_from_db)
             panoramas_dict[panorama_from_db.name] = [panorama_from_db.x, panorama_from_db.y]
-
-    print(panoramas_dict)
 
     i1, i2 = random.sample(range(len(panoramas_dict.keys())), 2)
 
