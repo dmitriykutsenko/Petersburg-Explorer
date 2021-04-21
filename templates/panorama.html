@@ -55,6 +55,13 @@
                     data: coordinates,
                     success: alert("sent coords")
                 });
+                $.ajax({
+                    url: "/game/",
+                    type: "POST",
+                    dataType: "json",
+                    data: coordinates,
+                    success: alert("posted")
+                });
             }
         </script>
     </head>
@@ -84,7 +91,7 @@
 
         <form>
             <button type="submit" id="complete_btn" onclick="getCoordinates()"
-                    class="btn btn-success complete_round pull-right" formmethod="post">
+                    class="btn btn-success complete_round pull-right">
                 <i class="fas fa-check-square"></i>
                 Завершить раунд
             </button>
