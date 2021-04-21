@@ -12,8 +12,8 @@ blueprint = Blueprint(__name__, 'game_blueprint', template_folder='templates')
 def index():
     session['Round'] = 1
     session['Score'] = 0
-    session['Current Destination Coordinates'] = 0
-    session['Current Coordinates'] = 0
+    session['Current Destination Coordinates'] = -1
+    session['Current Coordinates'] = -1
 
     return render_template('start.html')
 
