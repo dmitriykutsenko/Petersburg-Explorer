@@ -1,3 +1,22 @@
+.bar-wrap{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.wrap{
+    position:absolute;
+    top: 30%;
+}
+
+main{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
 body{
     text-align: center;
 }
@@ -83,6 +102,5 @@ body{
 
 
 .bar{
-    width: 600px;
+    width: 700px;
 }
-

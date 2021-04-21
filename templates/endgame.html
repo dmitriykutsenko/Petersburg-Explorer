@@ -6,18 +6,24 @@
     <link rel="stylesheet" href="../static/css/end.css" type="text/css">
 </head>
 
-<h1>Игра окончена</h1>
-<h2>Итоговый счёт: {{ score }}</h2>
-{% set percent = score/4000 * 100 %}
-<div class="bar">
-  <div class="meter">
-    <span style="width: {{ percent }}%"></span>
-  </div>
-</div>
+<main>
+    <div class="wrap">
+        <h1>Игра окончена</h1>
+        <h2>Итоговый счёт: {{ score }}</h2>
+        {% set percent = score/4000 * 100 %}
+        <div class="bar-wrap">
+            <div class="bar">
+                <div class="meter">
+                    <span style="width: {{ percent }}%"></span>
+                </div>
+            </div>
 
-<a href="/game/" class="btn btn-outline-light play_button">
-    Главное меню
-</a>
+        </div>
+        <a href="/" class="btn btn-outline-dark play_button">
+            Главное меню
+        </a>
+    </div>
+</main>
 
 <script type="text/javascript">
     $(".meter > span").each(function () {
