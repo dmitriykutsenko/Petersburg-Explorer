@@ -52,6 +52,11 @@ def game_screen():
                                             session['Current Destination Coordinates'])))
 
         if session['Round'] == 5:
-            return render_template('endgame.html', score=session['Score'])
+            return redirect('/finish_game/')
 
         return redirect('/game/')
+
+
+@blueprint.route('/finish_game/')
+def finish():
+    return render_template('endgame.html', score=session['Score'])
