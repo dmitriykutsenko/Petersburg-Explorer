@@ -18,18 +18,7 @@ def index():
     return render_template('start.html')
 
 
-@blueprint.route("/catch_coordinates/", methods=['PUT'])
-def catch_coordinates():
-    if request.method == 'PUT':
-        response = request.get_data().decode()[1:-1].replace('"x":', ""). \
-            replace(',"y"', '').replace(".", "").split(":")
-        session['Current Coordinates'] = response
-        session.modified = True
-        print("CAUGHT COORDINATES", session['Current Coordinates'])
-        return "caught coordinates"
-
-
-@blueprint.route("/game/", methods=['POST', 'GET'])
+@blueprint.route("/game/", methods=['POST', 'GET', 'PUT'])
 def game_screen():
     if request.method == 'GET':
         panoramas_dict, ind1, ind2 = get_panoramas_data(session['Round'])
@@ -60,3 +49,11 @@ def game_screen():
         session.modified = True
 
         return redirect('/game/')
+
+    elif request.method == 'PUT':
+        response = request.get_data().decode()[1:-1].replace('"x":', ""). \
+            replace(',"y"', '').replace(".", "").split(":")
+        session['Current Coordinates'] = response
+        session.modified = True
+        print("CAUGHT COORDINATES", session['Current Coordinates'])
+        return "caught coordinates"
