@@ -48,7 +48,7 @@ def info(update, context):
         reply_markup=markup)
 
 
-def main():
+def start_tgbot():
     updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher
@@ -63,4 +63,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    start_tgbot()
