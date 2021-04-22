@@ -15,6 +15,7 @@ class GameSession(SqlAlchemyBase):
 
     completed = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     destination_coordinates = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    current_coordinates = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     date = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
 
@@ -45,3 +46,6 @@ class GameSession(SqlAlchemyBase):
 
     def setDestinationCoordinates(self, coordinates):
         self.destination_coordinates = coordinates
+
+    def setCurrentCoordinates(self, coordinates):
+        self.current_coordinates = coordinates

@@ -52,10 +52,19 @@ def game_screen():
                                y=current_start_coords[1],
                                round=currentRound, score=score)
 
-    elif request.method == 'POST':
+    elif request.method == 'PUT':
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
 
+        db_sess = db_session.create_session()
+        gameSession = db_sess.query(GameSession).all()[-1]
+
+        gameSession.setCurrentCoordinates(" ".join(response))
+
+        db_sess.commit()
+        return 'caught coordinates'
+
+    elif request.method == "POST":
         db_sess = db_session.create_session()
         gameSession = db_sess.query(GameSession).all()[-1]
 
@@ -65,15 +74,11 @@ def game_screen():
 
         print("ROUND UPDATED:", currentRound)
 
-        score = gameSession.totalScore
-
-        resultScore = count_score(parse_coordinates(response),
+        resultScore = count_score(parse_coordinates(gameSession.current_coordinates.split()),
                                   parse_coordinates(parse_destination_coordinates(
-                                      gameSession.destination_coordinates.split(" "))))
+                                      gameSession.destination_coordinates.split())))
 
-        print("COUNTED SCORE WITH START:", response, "AND", gameSession.destination_coordinates)
-        print(resultScore, score)
-
+        score = gameSession.totalScore
         score += resultScore
 
         gameSession.setScore(score)
