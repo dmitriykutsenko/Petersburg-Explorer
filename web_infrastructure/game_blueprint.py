@@ -94,4 +94,7 @@ def game_screen():
 
 @blueprint.route('/finish_game/')
 def finish():
-    return render_template('endgame.html', score=228)
+    db_sess = db_session.create_session()
+    gameSession = db_sess.query(GameSession).all()[-1]
+
+    return render_template('endgame.html', score=gameSession.totalScore)
