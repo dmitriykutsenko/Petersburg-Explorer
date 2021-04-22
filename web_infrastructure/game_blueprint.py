@@ -24,7 +24,7 @@ def index():
     return render_template('start.html')
 
 
-@blueprint.route("/game/", methods=['POST', 'GET'])
+@blueprint.route("/game/", methods=['POST', 'GET', 'PUT'])
 def game_screen():
     if request.method == 'GET':
         db_sess = db_session.create_session()
@@ -83,8 +83,8 @@ def game_screen():
         if str(currentRound) == "5":
             print("GAME FINISHED")
             return redirect('/finish_game/')
-
-        return redirect('/game/')
+        else:
+            return redirect('/game/')
 
 
 @blueprint.route('/finish_game/')
