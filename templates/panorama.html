@@ -56,6 +56,26 @@
                     data: coordinates
                 });
             }
+
+            function countScore(x, y) {
+                var pScore = document.getElementById("score");
+                pScore = Number(pScore);
+                const currentX = parseCoordinate(panorama.getPosition()[0]);
+                const currentY = parseCoordinate(panorama.getPosition()[1]);
+
+            }
+
+            function parseCoordinate(coordinate) {
+                let result = String(coordinate).replace(".", "");
+                if (result.length > 8) {
+                    result = result.substring(0, 8);
+                } else {
+                    for (let i = 0; i < 8 - result.length; i++) {
+                        result += '0';
+                    }
+                }
+                return Number(result);
+            }
         </script>
     </head>
 
@@ -71,8 +91,8 @@
             <div class="score">
                 Очки
             </div>
-            <div class="score_amount">
-                {{ score }}
+            <div class="score_amount" id="score">
+                0
             </div>
         </div>
         <div class="destination">
@@ -82,14 +102,13 @@
         </div>
         <div id="player1" class="player"></div>
         <form>
-            <button type="submit" id="complete_btn" onclick="getCoordinates()" formmethod="post"
+            <button type="submit" id="complete_btn" onclick="countScore({{ xCount }}, {{ yCount }})" formmethod="post"
                     class="btn btn-success complete_round pull-right">
                 <i class="fas fa-check-square"></i>
                 Завершить раунд
             </button>
         </form>
     </div>
-
     </body>
 {% endblock %}
 
