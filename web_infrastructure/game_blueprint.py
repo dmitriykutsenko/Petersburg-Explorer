@@ -81,7 +81,7 @@ def game_screen():
         db_sess.commit()
 
         if str(currentRound) == "5":
-            print("AAA")
+            print("GAME FINISHED")
             return redirect('/finish_game/')
 
         return redirect('/game/')
