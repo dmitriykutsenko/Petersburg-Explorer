@@ -43,26 +43,29 @@
                 );
             });
 
-            function getCoordinates() {
-                const coordinates = JSON.stringify({
-                    "x": panorama.getPosition()[0],
-                    "y": panorama.getPosition()[1]
-                });
-
-                $.ajax({
-                    url: "/game/",
-                    type: "PUT",
-                    dataType: "json",
-                    data: coordinates
-                });
-            }
-
             function countScore(x, y) {
-                var pScore = document.getElementById("score");
+                alert('called');
+                let pScore = document.getElementById("score");
                 pScore = Number(pScore);
                 const currentX = parseCoordinate(panorama.getPosition()[0]);
                 const currentY = parseCoordinate(panorama.getPosition()[1]);
+                let distance = Math.sqrt((Number(x) - currentX) * (Number(x) - currentX) + (Number(y) - currentY) * (Number(y) - currentY));
+                let resultScore = 10 / distance * 10000;
+                if (resultScore > 1000) {
+                    resultScore = 1000
+                }
+                alert('here1');
+                alert('here2');
+                const sqlite3 = require('sqlite3').verbose()
+                let db = new sqlite3.Database('../db/Petersburg.db')
 
+                db.run('INSERT INTO game_sessions(totalScore) VALUES(?)', [228], function (err, row){
+                    if (err) {
+                        alert(err.message);
+                    }
+                    alert('added')
+                })
+                alert('aaaa');
             }
 
             function parseCoordinate(coordinate) {
@@ -70,7 +73,8 @@
                 if (result.length > 8) {
                     result = result.substring(0, 8);
                 } else {
-                    for (let i = 0; i < 8 - result.length; i++) {
+                    let diff = 8 - result.length;
+                    for (let i = 0; i < diff; i++) {
                         result += '0';
                     }
                 }
@@ -79,7 +83,7 @@
         </script>
     </head>
 
-    <body>
+    <body onload="">
     <div class="wrap_for_panorama">
         <div class="game_status">
             <div class="round">
@@ -92,7 +96,10 @@
                 Очки
             </div>
             <div class="score_amount" id="score">
-                0
+                <script>
+                    let element = document.getElementById('score');
+                    element.innerHTML = totalScore;
+                </script>
             </div>
         </div>
         <div class="destination">
