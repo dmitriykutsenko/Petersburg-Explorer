@@ -11,9 +11,14 @@ class GameSession(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
 
-    date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
+    round = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
-    finalScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    completed = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    destination_coordinates = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+    date = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
+
+    totalScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
     firstRound = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     secondRound = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
@@ -31,3 +36,12 @@ class GameSession(SqlAlchemyBase):
 
     def setFourthRoundScore(self, score):
         self.fourthRound = score
+
+    def setRound(self, round):
+        self.round = round
+
+    def setScore(self, score):
+        self.totalScore = score
+
+    def setDestinationCoordinates(self, coordinates):
+        self.destination_coordinates = coordinates

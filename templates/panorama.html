@@ -53,7 +53,8 @@
                     url: "/game/",
                     type: "POST",
                     dataType: "json",
-                    data: coordinates
+                    data: coordinates,
+                    success: alert("post")
                 });
             }
         </script>
@@ -81,14 +82,11 @@
             </div>
         </div>
         <div id="player1" class="player"></div>
-
-        <form>
-            <button type="submit" id="complete_btn" onclick="getCoordinates()"
-                    class="btn btn-success complete_round pull-right">
-                <i class="fas fa-check-square"></i>
-                Завершить раунд
-            </button>
-        </form>
+        <button type="submit" id="complete_btn" onclick="getCoordinates()"
+                class="btn btn-success complete_round pull-right">
+            <i class="fas fa-check-square"></i>
+            Завершить раунд
+        </button>
     </div>
 
     </body>
