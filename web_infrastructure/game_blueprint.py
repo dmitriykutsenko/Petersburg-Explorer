@@ -55,12 +55,9 @@ def game_screen():
     elif request.method == 'PUT':
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
-
         db_sess = db_session.create_session()
         gameSession = db_sess.query(GameSession).all()[-1]
-
         gameSession.setCurrentCoordinates(" ".join(response))
-
         db_sess.commit()
         return 'caught coordinates'
 
