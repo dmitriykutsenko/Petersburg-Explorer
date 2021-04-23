@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
     <title>Peterburg Explorer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,7 +38,7 @@
     </div>
     <span>
         {% if current_user.is_authenticated %}
-    <div class="dropdown">
+            <div class="dropdown">
       <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
          data-bs-toggle="dropdown"
          aria-expanded="false">
@@ -54,14 +55,14 @@
     </div>
 
 
-    </span>
+            </span>
 
 
-    {% else %}
+        {% else %}
 
-    <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
+            <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
 
-    {% endif %}
+        {% endif %}
 
 
 </nav>
