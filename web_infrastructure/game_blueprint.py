@@ -1,5 +1,3 @@
-import time
-
 from flask import Blueprint, render_template, redirect, request
 from flask_login import login_required
 
@@ -8,6 +6,7 @@ from data.game_session import GameSession
 from score_scripts.get_panoramas_data import get_panoramas_data
 from score_scripts.parsers import parse_coordinates
 from score_scripts.parsers import parse_destination_coordinates
+from score_scripts.parsers import toIntParser
 from score_scripts.score_count import count_score
 
 blueprint = Blueprint(__name__, 'game_blueprint', template_folder='templates')
@@ -20,6 +19,8 @@ def index():
     gameSession = GameSession()
     gameSession.setRound(1)
     gameSession.setScore(0)
+    gameSession.setDestinationCoordinates("")
+    gameSession.setFinishCoordinates("")
 
     db_sess.add(gameSession)
     db_sess.commit()
@@ -38,35 +39,51 @@ def game_screen():
 
         panoramas_dict, ind1, ind2 = get_panoramas_data(currentRound)
 
-        current_start_coords = (panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
-                                panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
+        start_coordinates = (panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
+                             panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
 
-        dest_coordinates = " ".join([str(panoramas_dict[list(panoramas_dict.keys())[ind2]][0]),
-                                     str(panoramas_dict[list(panoramas_dict.keys())[ind2]][1])])
+        db_dest_coordinates = gameSession.destinationCoordinatesList.split(";")
 
-        score = gameSession.totalScore
+        dest_coordinates = " ".join(
+            parse_coordinates(
+                parse_destination_coordinates(
+                    [str(panoramas_dict[list(panoramas_dict.keys())[ind2]][0]),
 
-        gameSession.setDestinationCoordinates(dest_coordinates)
+                     str(panoramas_dict[list(panoramas_dict.keys())[ind2]][1])]
+                )
+            )
+        )
+
+        db_dest_coordinates.append(dest_coordinates)
+
+        gameSession.setDestinationCoordinates(";".join(db_dest_coordinates))
 
         db_sess.commit()
 
         return render_template('panorama.html',
                                destination=list(panoramas_dict.keys())[ind2],
-                               x=current_start_coords[0],
-                               y=current_start_coords[1],
-                               round=currentRound, score=score)
+                               x=start_coordinates[0],
+                               y=start_coordinates[1],
+                               round=currentRound)
 
     elif request.method == 'PUT':
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
         db_sess = db_session.create_session()
         gameSession = db_sess.query(GameSession).all()[-1]
-        gameSession.setCurrentCoordinates(" ".join(response))
+
+        db_finish_coordinates = gameSession.finishCoordinatesList.split(";")
+        db_finish_coordinates.append(
+            " ".join(
+                parse_coordinates(response)
+            )
+        )
+
+        gameSession.setFinishCoordinates(";".join(db_finish_coordinates))
         db_sess.commit()
         return 'caught coordinates'
 
     elif request.method == "POST":
-        time.sleep(5)
         db_sess = db_session.create_session()
         gameSession = db_sess.query(GameSession).all()[-1]
 
@@ -75,15 +92,6 @@ def game_screen():
         gameSession.setRound(currentRound)
 
         print("ROUND UPDATED:", currentRound)
-
-        resultScore = count_score(parse_coordinates(gameSession.current_coordinates.split()),
-                                  parse_coordinates(parse_destination_coordinates(
-                                      gameSession.destination_coordinates.split())))
-
-        score = gameSession.totalScore
-        score += resultScore
-
-        gameSession.setScore(score)
 
         db_sess.commit()
 
@@ -100,4 +108,20 @@ def finish():
     db_sess = db_session.create_session()
     gameSession = db_sess.query(GameSession).all()[-1]
 
-    return render_template('endgame.html', score=gameSession.totalScore)
+    totalScore = 0
+
+    finishCoordinates = gameSession.finishCoordinatesList.split(";")
+    destinationCoordinates = gameSession.destinationCoordinatesList.split(";")
+
+    for i in range(1, 5):
+        thisFinishCoordinates = finishCoordinates[i]
+        thisDestinationCoordinates = destinationCoordinates[i]
+
+        print(thisFinishCoordinates, thisDestinationCoordinates)
+
+        plusScore = count_score(toIntParser(thisFinishCoordinates.split()),
+                                toIntParser(thisDestinationCoordinates.split()))
+        gameSession.setRoundScore(i, plusScore)
+        totalScore += plusScore
+
+    return render_template('endgame.html', score=totalScore)
