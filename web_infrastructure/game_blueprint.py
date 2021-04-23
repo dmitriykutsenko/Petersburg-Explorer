@@ -1,6 +1,7 @@
 import time
 
 from flask import Blueprint, render_template, redirect, request
+from flask_login import login_required
 
 from data import db_session
 from data.game_session import GameSession
@@ -27,6 +28,7 @@ def index():
 
 
 @blueprint.route("/game/", methods=['POST', 'GET', 'PUT'])
+@login_required
 def game_screen():
     if request.method == 'GET':
         db_sess = db_session.create_session()
@@ -93,6 +95,7 @@ def game_screen():
 
 
 @blueprint.route('/finish_game/')
+@login_required
 def finish():
     db_sess = db_session.create_session()
     gameSession = db_sess.query(GameSession).all()[-1]
