@@ -1,4 +1,7 @@
+import datetime
+
 import sqlalchemy
+from sqlalchemy import orm
 
 from data.db_session import SqlAlchemyBase
 
@@ -17,7 +20,7 @@ class GameSession(SqlAlchemyBase):
 
     finishCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    date = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
+    date = sqlalchemy.Column(sqlalchemy.Date, nullable=True, default=datetime.datetime.now)
     totalScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
     round = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
@@ -26,6 +29,8 @@ class GameSession(SqlAlchemyBase):
     secondRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     thirdRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     fourthRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    user = orm.relation('User')
 
     def setRoundScore(self, roundNumber, score):
         if roundNumber == 1:

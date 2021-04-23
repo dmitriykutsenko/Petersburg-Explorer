@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from data import db_session
 from data.game_session import GameSession
@@ -123,6 +123,12 @@ def finish():
                                 toIntParser(thisDestinationCoordinates.split()))
         gameSession.setRoundScore(i, plusScore)
         totalScore += plusScore
+
+    game_session = GameSession()
+    game_session.totalScore = totalScore
+
+    current_user.game_sessions.append(game_session)
+    db_sess.merge(current_user)
 
     db_sess.commit()
 

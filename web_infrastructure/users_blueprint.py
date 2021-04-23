@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, session
-from flask_login import login_user, logout_user, login_required
-
+from flask_login import login_user, logout_user, login_required, current_user
 
 from data import db_session
+from data.game_session import GameSession
 
 from data.user import User
 
@@ -83,6 +83,14 @@ def login():
                                message="Неправильный логин или пароль",
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
+
+
+@blueprint.route('/profile')
+@login_required
+def profile():
+    db_sess = db_session.create_session()
+    game_sessions = db_sess.query(GameSession).filter((GameSession.user == current_user))
+    return render_template("profile.html", game_sessions=game_sessions)
 
 
 @blueprint.route('/logout')
