@@ -6,6 +6,7 @@ from data import db_session
 from data.user import User
 from dotenv import load_dotenv
 from web_infrastructure import users_blueprint, game_blueprint
+from waitress import serve
 
 load_dotenv(dotenv_path='email_scripts/.env')
 
