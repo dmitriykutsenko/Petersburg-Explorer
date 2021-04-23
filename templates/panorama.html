@@ -48,11 +48,12 @@
                     "x": panorama.getPosition()[0],
                     "y": panorama.getPosition()[1]
                 });
+
                 $.ajax({
-                    url: "/catch_coordinates/",
+                    url: "/game/",
                     type: "PUT",
                     dataType: "json",
-                    data: coordinates,
+                    data: coordinates
                 });
             }
         </script>
@@ -67,12 +68,6 @@
             <div class="round_number">
                 {{ round }}
             </div>
-            <div class="score">
-                Очки
-            </div>
-            <div class="score_amount">
-                {{ score }}
-            </div>
         </div>
         <div class="destination">
             <div class="destination_name">
@@ -80,10 +75,9 @@
             </div>
         </div>
         <div id="player1" class="player"></div>
-
         <form>
-            <button type="submit" id="complete_btn" onclick="getCoordinates()"
-                    class="btn btn-success complete_round pull-right" formmethod="post">
+            <button type="submit" id="complete_btn" onclick="getCoordinates()" formmethod="post"
+                    class="btn btn-success complete_round pull-right">
                 <i class="fas fa-check-square"></i>
                 Завершить раунд
             </button>

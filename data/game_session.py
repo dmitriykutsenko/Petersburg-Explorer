@@ -10,5 +10,41 @@ class GameSession(SqlAlchemyBase):
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
-    date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
-    score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    completed = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    destinationCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+    finishCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+    date = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
+    totalScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    round = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    firstRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    secondRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    thirdRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    fourthRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    def setRoundScore(self, roundNumber, score):
+        if roundNumber == 1:
+            self.firstRoundScore = score
+        if roundNumber == 2:
+            self.secondRoundScore = score
+        if roundNumber == 3:
+            self.thirdRoundScore = score
+        if roundNumber == 4:
+            self.fourthRoundScore = score
+
+    def setRound(self, round):
+        self.round = round
+
+    def setScore(self, score):
+        self.totalScore = score
+
+    def setDestinationCoordinates(self, coordinates):
+        self.destinationCoordinatesList = coordinates
+
+    def setFinishCoordinates(self, coordinates):
+        self.finishCoordinatesList = coordinates
