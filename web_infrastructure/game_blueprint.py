@@ -124,4 +124,6 @@ def finish():
         gameSession.setRoundScore(i, plusScore)
         totalScore += plusScore
 
+    db_sess.commit()
+
     return render_template('endgame.html', score=totalScore)
