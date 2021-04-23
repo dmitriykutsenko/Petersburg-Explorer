@@ -1,3 +1,5 @@
+import time
+
 from flask import Blueprint, render_template, redirect, request
 
 from data import db_session
@@ -62,6 +64,7 @@ def game_screen():
         return 'caught coordinates'
 
     elif request.method == "POST":
+        time.sleep(5)
         db_sess = db_session.create_session()
         gameSession = db_sess.query(GameSession).all()[-1]
 
