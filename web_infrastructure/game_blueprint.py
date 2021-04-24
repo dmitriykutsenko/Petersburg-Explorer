@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, request
-from flask_login import login_required, current_user
+from flask import Blueprint, render_template, redirect, request, session
+from flask_login import login_required
 
 from data import db_session
 from data.game_session import GameSession
@@ -25,6 +25,11 @@ def index():
     db_sess.add(gameSession)
     db_sess.commit()
 
+
+    db_sess = db_session.create_session()
+    gameSession = db_sess.query(GameSession).all()[-1]
+    session['sessionId'] = gameSession.id
+
     return render_template('start.html')
 
 
@@ -33,9 +38,11 @@ def index():
 def game_screen():
     if request.method == 'GET':
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
+        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
         currentRound = gameSession.round
+        if str(currentRound) == '5':
+            return redirect('/finish_game/')
 
         panoramas_dict, ind1, ind2 = get_panoramas_data(currentRound)
 
@@ -70,7 +77,7 @@ def game_screen():
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
+        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
         db_finish_coordinates = gameSession.finishCoordinatesList.split(";")
         db_finish_coordinates.append(
@@ -85,7 +92,7 @@ def game_screen():
 
     elif request.method == "POST":
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
+        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
         currentRound = gameSession.round
         currentRound += 1
@@ -95,18 +102,15 @@ def game_screen():
 
         db_sess.commit()
 
-        if str(currentRound) == "5":
-            print("GAME FINISHED")
-            return redirect('/finish_game/')
-        else:
-            return redirect('/game/')
+
+        return redirect('/game/')
 
 
 @blueprint.route('/finish_game/')
 @login_required
 def finish():
     db_sess = db_session.create_session()
-    gameSession = db_sess.query(GameSession).all()[-1]
+    gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
     totalScore = 0
 
@@ -123,17 +127,6 @@ def finish():
                                 toIntParser(thisDestinationCoordinates.split()))
         gameSession.setRoundScore(i, plusScore)
         totalScore += plusScore
-
-    game_session = GameSession()
-    game_session.firstRoundScore = gameSession.firstRoundScore
-    game_session.secondRoundScore = gameSession.secondRoundScore
-    game_session.thirdRoundScore = gameSession.thirdRoundScore
-    game_session.fourthRoundScore = gameSession.fourthRoundScore
-
-    game_session.totalScore = totalScore
-
-    current_user.game_sessions.append(game_session)
-    db_sess.merge(current_user)
 
     db_sess.commit()
 
