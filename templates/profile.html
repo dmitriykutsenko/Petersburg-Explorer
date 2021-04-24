@@ -2,29 +2,23 @@
 
 {% block content %}
 
+<head>
+    <link rel="stylesheet" href="../static/css/profile.css" type="text/css">
+</head>
+
 <h1>История игр</h1>
 {% for item in game_sessions%}
 <div class="col-md6 border rounded">
-    <h2>{{item.title}}</h2>
-    <div>
-        {{item.content}}
-    </div>
-    <div>
+    <h2>{{item.totalScore}}</h2>
+    <div class="rounds">
+        <ul>
+            <li>{{item.firstRoundScore}}</li>
+            <li>{{item.secondRoundScore}}</li>
+            <li>{{item.thirdRoundScore}}</li>
+            <li>{{item.fourthRoundScore}}</li>
+        </ul>
         Игрок - {{item.user.name}}, Дата сессии - {{item.date}}
     </div>
-
-    {% if current_user.is_authenticated and current_user == item.user %}
-    <div>
-        <a href="/news/{{ item.id }}" class="btn btn-warning">
-            Изменить
-        </a>
-        <a href="/news_delete/{{ item.id }}" class="btn btn-danger">
-            Удалить
-        </a>
-    </div>
-    {% endif %}
-
-
 </div>
 {% endfor %}
 {% endblock %}

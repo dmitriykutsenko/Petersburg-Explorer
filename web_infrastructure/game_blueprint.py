@@ -125,6 +125,11 @@ def finish():
         totalScore += plusScore
 
     game_session = GameSession()
+    game_session.firstRoundScore = gameSession.firstRoundScore
+    game_session.secondRoundScore = gameSession.secondRoundScore
+    game_session.thirdRoundScore = gameSession.thirdRoundScore
+    game_session.fourthRoundScore = gameSession.fourthRoundScore
+
     game_session.totalScore = totalScore
 
     current_user.game_sessions.append(game_session)
