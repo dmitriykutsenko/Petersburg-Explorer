@@ -36,6 +36,8 @@ def game_screen():
         gameSession = db_sess.query(GameSession).all()[-1]
 
         currentRound = gameSession.round
+        if str(currentRound) == '5':
+            return redirect('/finish_game/')
 
         panoramas_dict, ind1, ind2 = get_panoramas_data(currentRound)
 
@@ -95,11 +97,8 @@ def game_screen():
 
         db_sess.commit()
 
-        if str(currentRound) == "5":
-            print("GAME FINISHED")
-            return redirect('/finish_game/')
-        else:
-            return redirect('/game/')
+
+        return redirect('/game/')
 
 
 @blueprint.route('/finish_game/')
