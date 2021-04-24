@@ -1,3 +1,5 @@
+import random
+
 from flask import Blueprint, render_template, redirect, request, session
 from flask_login import login_required
 
@@ -44,7 +46,9 @@ def game_screen():
         if str(currentRound) == '5':
             return redirect('/finish_game/')
 
-        panoramas_dict, ind1, ind2 = get_panoramas_data(currentRound)
+        cluster_id = random.randint(1, 7)
+
+        panoramas_dict, ind1, ind2 = get_panoramas_data(str(cluster_id))
 
         start_coordinates = (panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
                              panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
