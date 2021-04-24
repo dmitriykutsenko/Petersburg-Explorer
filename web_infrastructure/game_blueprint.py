@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, request
+from flask import Blueprint, render_template, redirect, request, session
 from flask_login import login_required
 
 from data import db_session
@@ -25,6 +25,11 @@ def index():
     db_sess.add(gameSession)
     db_sess.commit()
 
+
+    db_sess = db_session.create_session()
+    gameSession = db_sess.query(GameSession).all()[-1]
+    session['sessionId'] = gameSession.id
+
     return render_template('start.html')
 
 
@@ -33,7 +38,7 @@ def index():
 def game_screen():
     if request.method == 'GET':
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
+        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
         currentRound = gameSession.round
         if str(currentRound) == '5':
@@ -72,7 +77,7 @@ def game_screen():
         response = request.get_data().decode()[1:-1].replace('"x":', ""). \
             replace(',"y"', '').replace(".", "").split(":")
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
+        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
         db_finish_coordinates = gameSession.finishCoordinatesList.split(";")
         db_finish_coordinates.append(
@@ -87,7 +92,7 @@ def game_screen():
 
     elif request.method == "POST":
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
+        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
         currentRound = gameSession.round
         currentRound += 1
@@ -105,7 +110,7 @@ def game_screen():
 @login_required
 def finish():
     db_sess = db_session.create_session()
-    gameSession = db_sess.query(GameSession).all()[-1]
+    gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
     totalScore = 0
 
