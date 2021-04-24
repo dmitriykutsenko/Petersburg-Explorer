@@ -22,7 +22,6 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     game_sessions = orm.relation('GameSession', back_populates='user')
 
-
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 

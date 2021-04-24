@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, session
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from data import db_session
 from data.game_session import GameSession
@@ -24,7 +24,6 @@ def index():
 
     db_sess.add(gameSession)
     db_sess.commit()
-
 
     db_sess = db_session.create_session()
     gameSession = db_sess.query(GameSession).all()[-1]
@@ -102,7 +101,6 @@ def game_screen():
 
         db_sess.commit()
 
-
         return redirect('/game/')
 
 
@@ -110,6 +108,7 @@ def game_screen():
 @login_required
 def finish():
     db_sess = db_session.create_session()
+    db_sess.expire_on_commit = False
     gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
     totalScore = 0
@@ -127,6 +126,17 @@ def finish():
                                 toIntParser(thisDestinationCoordinates.split()))
         gameSession.setRoundScore(i, plusScore)
         totalScore += plusScore
+
+    game_session = GameSession()
+
+    game_session.totalScore = totalScore
+    game_session.firstRoundScore = gameSession.firstRoundScore
+    game_session.secondRoundScore = gameSession.secondRoundScore
+    game_session.thirdRoundScore = gameSession.thirdRoundScore
+    game_session.fourthRoundScore = gameSession.fourthRoundScore
+
+    current_user.game_sessions.append(game_session)
+    db_sess.merge(current_user)
 
     db_sess.commit()
 
