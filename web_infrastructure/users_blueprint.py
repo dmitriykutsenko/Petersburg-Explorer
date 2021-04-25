@@ -18,83 +18,103 @@ blueprint = Blueprint(__name__, 'users_blueprint', template_folder='templates')
 
 @blueprint.route("/signup", methods=['GET', 'POST'])
 def register():
-    form = RegisterForm()
-    if form.validate_on_submit():
-        if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Пароли не совпадают")
-        db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Такой пользователь уже есть")
+    try:
+        form = RegisterForm()
+        if form.validate_on_submit():
+            if form.password.data != form.password_again.data:
+                return render_template('register.html', title='Регистрация',
+                                       form=form,
+                                       message="Пароли не совпадают")
+            db_sess = db_session.create_session()
+            if db_sess.query(User).filter(User.email == form.email.data).first():
+                return render_template('register.html', title='Регистрация',
+                                       form=form,
+                                       message="Такой пользователь уже есть")
 
-        verification_code = generate_code()
+            verification_code = generate_code()
 
-        email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
-                     "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
+            email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
+                         "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
 
-        session['Verification Code'] = verification_code
-        session['User Email'] = form.email.data
-        session['User Nickname'] = form.name.data
-        session['User Password'] = form.password.data
+            session['Verification Code'] = verification_code
+            session['User Email'] = form.email.data
+            session['User Nickname'] = form.name.data
+            session['User Password'] = form.password.data
 
-        return redirect('/email_verification')
+            return redirect('/email_verification')
 
-    return render_template('register.html', title='Регистрация', form=form)
+        return render_template('register.html', title='Регистрация', form=form)
+
+    except Exception:
+        return render_template('error.html')
 
 
 @blueprint.route('/email_verification', methods=['GET', 'POST'])
 def email_verification():
-    form = EmailVerificationForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        """if session['Verification Code'] == form.code.data:"""
-        if True:
-            user = User(
-                name=session['User Nickname'],
-                email=session['User Email'],
-            )
-            user.set_password(session['User Password'])
-            db_sess.add(user)
-            db_sess.commit()
+    try:
+        form = EmailVerificationForm()
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            """if session['Verification Code'] == form.code.data:"""
+            if True:
+                user = User(
+                    name=session['User Nickname'],
+                    email=session['User Email'],
+                )
+                user.set_password(session['User Password'])
+                db_sess.add(user)
+                db_sess.commit()
 
-            return redirect('/login')
+                return redirect('/login')
 
-        else:
-            return render_template('email_verification.html', title='Подтверждение', form=form,
-                                   message='Неверный код подтверждения')
+            else:
+                return render_template('email_verification.html', title='Подтверждение', form=form,
+                                       message='Неверный код подтверждения')
 
-    return render_template('email_verification.html', title='Подтверждение', form=form)
+        return render_template('email_verification.html', title='Подтверждение', form=form)
+
+    except Exception:
+        return render_template('error.html')
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+    try:
+        form = LoginForm()
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.email == form.email.data).first()
+            if user and user.check_password(form.password.data):
+                login_user(user, remember=form.remember_me.data)
+                return redirect("/")
 
-        return render_template('login.html',
-                               message="Неправильный логин или пароль",
-                               form=form)
-    return render_template('login.html', title='Авторизация', form=form)
+            return render_template('login.html',
+                                   message="Неправильный логин или пароль",
+                                   form=form)
+        return render_template('login.html', title='Авторизация', form=form)
+
+    except Exception:
+        return render_template('error.html')
 
 
 @blueprint.route('/profile')
 @login_required
 def profile():
-    db_sess = db_session.create_session()
-    game_sessions = db_sess.query(GameSession).filter((GameSession.user == current_user))
-    return render_template("profile.html", game_sessions=game_sessions)
+    try:
+        db_sess = db_session.create_session()
+        game_sessions = db_sess.query(GameSession).filter((GameSession.user == current_user))
+        return render_template("profile.html", game_sessions=game_sessions)
+
+    except Exception:
+        return render_template('error.html')
 
 
 @blueprint.route('/logout')
 @login_required
 def logout():
-    logout_user()
-    return redirect("/")
+    try:
+        logout_user()
+        return redirect("/")
+
+    except Exception:
+        return render_template('error.html')
