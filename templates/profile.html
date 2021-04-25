@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="../static/css/profile.css" type="text/css">
+</head>
+
+<h2>История игр</h2>
+{% for item in game_sessions%}
+<span class="game_label">Игра № {{ loop.index }}</span> <span>({{ item.date }})</span>
+<div class="game_session">
+    <div class="rounds">
+        <ul>
+            <li><span>Раунд-1</span><br>{{item.firstRoundScore}}</li>
+            <li><span>Раунд-2</span><br>{{item.secondRoundScore}}</li>
+            <li><span>Раунд-3</span><br>{{item.thirdRoundScore}}</li>
+            <li><span>Раунд-4</span><br>{{item.fourthRoundScore}}</li>
+            <li>Результат {{ item.totalScore }}</li>
+        </ul>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

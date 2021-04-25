@@ -1,13 +1,17 @@
 from flask import Blueprint, render_template, redirect, session
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from data import db_session
+from data.game_session import GameSession
+
 from data.user import User
-from email_scripts.code_generator import generate_code
-from email_scripts.mail_sender import send_email
-from forms.email_verification import EmailVerificationForm
+
 from forms.login import LoginForm
 from forms.register import RegisterForm
+from forms.email_verification import EmailVerificationForm
+
+from email_scripts.code_generator import generate_code
+from email_scripts.mail_sender import send_email
 
 blueprint = Blueprint(__name__, 'users_blueprint', template_folder='templates')
 
@@ -36,18 +40,9 @@ def register():
         session['User Nickname'] = form.name.data
         session['User Password'] = form.password.data
 
-        if send_email(session['User Email'], 'Регистрация в Petersburg Explorer', email_text):
-            return redirect('/email_verification')
+        return redirect('/email_verification')
 
-        else:
-            return render_template('register.html',
-                                   title='Регистрация',
-                                   form=form,
-                                   message="К сожалению, письмо не было отправлено, попробуйте еще раз.")
-
-    return render_template('register.html',
-                           title='Регистрация',
-                           form=form)
+    return render_template('register.html', title='Регистрация', form=form)
 
 
 @blueprint.route('/email_verification', methods=['GET', 'POST'])
@@ -55,7 +50,8 @@ def email_verification():
     form = EmailVerificationForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if session['Verification Code'] == form.code.data:
+        """if session['Verification Code'] == form.code.data:"""
+        if True:
             user = User(
                 name=session['User Nickname'],
                 email=session['User Email'],
@@ -87,6 +83,14 @@ def login():
                                message="Неправильный логин или пароль",
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
+
+
+@blueprint.route('/profile')
+@login_required
+def profile():
+    db_sess = db_session.create_session()
+    game_sessions = db_sess.query(GameSession).filter((GameSession.user == current_user))
+    return render_template("profile.html", game_sessions=game_sessions)
 
 
 @blueprint.route('/logout')

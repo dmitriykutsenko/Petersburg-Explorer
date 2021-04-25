@@ -33,7 +33,7 @@
         <ul>
             <li><a href="#vk"><i class="fab fa-vk "></i></a></li>
             <li><a href="https://tgclick.com/peterburgexplorer_bot"><i class="fab fa-telegram"></i></a></li>
-            <li><a href="#ds"><i class="fab fa-discord"></i></a></li>
+            <li><a href="#info"><i class="fas fa-info-circle"></i></a></li>
         </ul>
     </div>
     <span>
@@ -47,8 +47,7 @@
       </a>
 
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li><a class="dropdown-item" href="#">Профиль</a></li>
-          <li><a class="dropdown-item" href="#">Настройки</a></li>
+          <li><a class="dropdown-item" href="/profile">Профиль</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="/logout">Выйти</a></li>
       </ul>
@@ -58,11 +57,11 @@
             </span>
 
 
-        {% else %}
+    {% else %}
 
-            <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
+    <a href="/login" class="btn btn-outline-light btn-sm">Log in</a>
 
-        {% endif %}
+    {% endif %}
 
 
 </nav>
