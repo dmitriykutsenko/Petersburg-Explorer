@@ -44,7 +44,7 @@ def bot():
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'сайт':
                 vk.messages.send(user_id=event.obj.message['from_id'],
-                                 message=f"petersburg-explorer.herokuapp.com \n",
+                                 message=f"petersburg-explorer.ru \n",
                                  random_id=random.randint(0, 2 ** 64))
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Если ВКонтакте не открывает ссылку, то просто вставьте ее в браузер",
