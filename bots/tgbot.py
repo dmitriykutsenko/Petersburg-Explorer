@@ -5,9 +5,6 @@ from telegram import ReplyKeyboardMarkup
 from telegram.ext import CommandHandler
 from telegram.ext import Updater
 
-load_dotenv(dotenv_path='data/.env')
-TOKEN = "1601660987:AAH8--Glix9nt_3um_icg8mhR-epK6xe1yQ"
-
 reply_keyboard = [['/infoⓘ', '/site🌐'], ['/help❔', '/commands📖']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
@@ -84,6 +81,8 @@ def commands(update, context):
 
 
 def start_tgbot():
+    load_dotenv(dotenv_path='data/.env')
+    TOKEN = os.getenv('TELEGRAM_TOKEN')
     updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher
