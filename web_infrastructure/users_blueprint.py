@@ -3,15 +3,12 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from data import db_session
 from data.game_session import GameSession
-
 from data.user import User
-
-from forms.login import LoginForm
-from forms.register import RegisterForm
-from forms.email_verification import EmailVerificationForm
-
 from email_scripts.code_generator import generate_code
 from email_scripts.mail_sender import send_email
+from forms.email_verification import EmailVerificationForm
+from forms.login import LoginForm
+from forms.register import RegisterForm
 
 blueprint = Blueprint(__name__, 'users_blueprint', template_folder='templates')
 
@@ -41,7 +38,15 @@ def register():
             session['User Nickname'] = form.name.data
             session['User Password'] = form.password.data
 
-            return redirect('/email_verification')
+            if send_email(session['User Email'],
+                          'Регистрация в Petersburg Explorer',
+                          email_text):
+                return redirect('/email_verification')
+
+            else:
+                return render_template('register.html', title='Регистрация',
+                                       form=form,
+                                       message="К сожалению, письмо не было отправлено. Попробуйте еще раз")
 
         return render_template('register.html', title='Регистрация', form=form)
 
@@ -55,8 +60,7 @@ def email_verification():
         form = EmailVerificationForm()
         if form.validate_on_submit():
             db_sess = db_session.create_session()
-            """if session['Verification Code'] == form.code.data:"""
-            if True:
+            if session['Verification Code'] == form.code.data:
                 user = User(
                     name=session['User Nickname'],
                     email=session['User Email'],

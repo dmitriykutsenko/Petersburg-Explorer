@@ -162,6 +162,6 @@ def finish():
         return render_template('error.html')
 
 
-@blueprint.route('/info')
+@blueprint.route('/info/')
 def info():
     return render_template('info.html')
