@@ -29,3 +29,12 @@ body{
     font-size: 18pt;
     font-weight: 500;
 }
+
+.user_info{
+    padding-top: 10px;
+    display: block;
+}
+
+.info_label{
+    font-size: 18pt;
+}
