@@ -1,19 +1,19 @@
+import datetime
+import os
+import random
 import string
 
-import vk
 import vk_api
-from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
-import random
-import datetime
 from pyowm import OWM
 from pyowm.utils.config import get_default_config
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
-TOKEN = '9a91352c9040eb78f534e8b0d69cb6c3409aabc434dce6e3fe4283c8f5ff08b7c364c766e22fc0fd157b8'
-API = 'efe788c9ea7384d848c36fe48753fa66'
+TOKEN = os.getenv('VK_TOKEN')
+API = os.getenv('VK_API')
 
-bad_words = ['какашка', 'тупой', 'плохой', 'ужасный', 'нехороший', 'соси', 'салют', 'дибил']
-hello_words = ['привет', 'хай', 'здарова']
-bye_words = ['пока', 'до свидания']
+bad_words = ['какашка', 'тупой', 'дибил', 'даун', 'чмо']
+hello_words = ['привет', 'хай', 'здарова', 'салам', 'салют', 'челси']
+bye_words = ['пока', 'до свидания', 'бб']
 yes_words = ['да', 'конечно', 'абсолютно', 'верно', 'точно']
 no_words = ['нет']
 how_are_u_words = ['как дела', 'как жизнь', 'все хорошо']
@@ -25,7 +25,8 @@ def bot():
     vk_session = vk_api.VkApi(
         token=TOKEN)
 
-    longpoll = VkBotLongPoll(vk_session, 203903199)
+    group_id = int(os.environ["VK_GROUP_ID"])
+    longpoll = VkBotLongPoll(vk_session, group_id)
 
     vk = vk_session.get_api()
 
@@ -52,8 +53,8 @@ def bot():
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'информация':
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Petersburg Explorer - это новая игра о Санкт-Петербурге. Вы погружаетесь в северную столицу России благодаря панорамам Яндекс карт. \n \n"
-                                            "В процессе игры вы будете гулять по городу. Вам нужно будет дойти до определённого места. "
-                                            "Чем ближе вы придёте к месту назначения, тем больше очков вы получите! Так что вперёд гулять по нашему любимому городу!",
+                                         "В процессе игры вы будете гулять по городу. Вам нужно будет дойти до определённого места. "
+                                         "Чем ближе вы придёте к месту назначения, тем больше очков вы получите! Так что вперёд гулять по нашему любимому городу!",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'дата':
                 vk.messages.send(user_id=event.obj.message['from_id'],
