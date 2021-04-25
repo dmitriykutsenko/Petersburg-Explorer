@@ -6,9 +6,9 @@ from telegram.ext import CommandHandler
 from telegram.ext import Updater
 
 load_dotenv(dotenv_path='data/.env')
-TOKEN = os.getenv('TELEGRAM_TOKEN')
+TOKEN = "1601660987:AAH8--Glix9nt_3um_icg8mhR-epK6xe1yQ"
 
-reply_keyboard = [['/infoⓘ', '/site🌐', '/help❔']]
+reply_keyboard = [['/infoⓘ', '/site🌐'], ['/help❔', '/commands📖']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 
@@ -60,6 +60,29 @@ def info(update, context):
         reply_markup=markup)
 
 
+def vk(update, context):
+    update.message.reply_text(
+        "VK: https://vk.com/petersburgexplorer",
+        reply_markup=markup)
+
+
+def github(update, context):
+    update.message.reply_text(
+        "Github: https://github.com/dmtrkv/Petersburg_Explorer",
+        reply_markup=markup)
+
+
+def commands(update, context):
+    update.message.reply_text(
+        """📖Список команд:📖
+/help - проблемы и их решения
+/info - общая информация о проекте 
+/vk - группа вк с ботом
+/github - гитхаб проекта
+/site - наш сайт""",
+        reply_markup=markup)
+
+
 def start_tgbot():
     updater = Updater(TOKEN, use_context=True)
 
@@ -69,6 +92,9 @@ def start_tgbot():
     dp.add_handler(CommandHandler("site", site))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("info", info))
+    dp.add_handler(CommandHandler("vk", vk))
+    dp.add_handler(CommandHandler("github", github))
+    dp.add_handler(CommandHandler("commands", commands))
 
     updater.start_polling()
 
