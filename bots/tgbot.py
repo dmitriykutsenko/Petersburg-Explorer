@@ -1,8 +1,10 @@
-from telegram.ext import Updater, MessageHandler, Filters
-from telegram.ext import CallbackContext, CommandHandler
-from telegram import ReplyKeyboardMarkup
+import os
 
-TOKEN = "1601660987:AAH8--Glix9nt_3um_icg8mhR-epK6xe1yQ"
+from telegram import ReplyKeyboardMarkup
+from telegram.ext import CommandHandler
+from telegram.ext import Updater
+
+TOKEN = os.getenv('TELEGRAM_TOKEN')
 
 reply_keyboard = [['/infoⓘ', '/site🌐', '/help❔']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
