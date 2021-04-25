@@ -38,7 +38,7 @@ def start(update, context):
 
 def site(update, context):
     update.message.reply_text(
-        "Сайт: https://188.68.221.19",
+        "Сайт: http://petersburg-explorer.ru",
         reply_markup=markup)
 
 
