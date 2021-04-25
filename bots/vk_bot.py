@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from pyowm import OWM
 from pyowm.utils.config import get_default_config
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
+from data.db_session import create_session
 
 load_dotenv(dotenv_path='data/.env')
 TOKEN = os.getenv('VK_TOKEN')
@@ -66,7 +67,7 @@ def bot():
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=now.strftime("%H:%M:%S"),
                                  random_id=random.randint(0, 2 ** 64))
-            elif event.obj.message['text'].lower().rstrip(string.punctuation) == 'погода':
+            elif 'погода' in event.obj.message['text'].lower().rstrip(string.punctuation):
                 config_dict = get_default_config()
                 config_dict['language'] = 'ru'
                 owm = OWM(API, config_dict)
@@ -77,26 +78,43 @@ def bot():
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Сейчас в городе Санкт-Петербурге " + str(int(temperature)) + " °С",
                                  random_id=random.randint(0, 2 ** 64))
+
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() in hello_words:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Привет, {first_name}!",
                                  random_id=random.randint(0, 2 ** 64))
+
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() in bad_words:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Соблюдайте нормы речевого этикета!",
                                  random_id=random.randint(0, 2 ** 64))
+
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() in yes_words:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Хорошо",
                                  random_id=random.randint(0, 2 ** 64))
+
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() in bye_words:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Удачи!",
                                  random_id=random.randint(0, 2 ** 64))
+
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() in how_are_u_words:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"У меня все хорошо!",
                                  random_id=random.randint(0, 2 ** 64))
+
+            elif 'жалоб' in event.obj.message['text'].lower().rstrip(string.punctuation).strip():
+                vk.messages.send(user_id=event.obj.message['from_id'],
+                                 message=f"Вы хотите оставить жалобу на личное рассмотрение разработчиками? (да, нет)",
+                                 random_id=random.randint(0, 2 ** 64))
+                if 'да' in event.obj.message['text'].lower().strip():
+                    vk.messages.send(user_id=event.obj.message['from_id'],
+                                     message=f"Максимально подробно опишите проблему, прозошедшую с Вами",
+                                     random_id=random.randint(0, 2 ** 64))
+
+            #         добавление жалобы в БД
+
             else:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"{event.obj.message['text'].capitalize().rstrip(string.punctuation)}? Вы уверены? ",

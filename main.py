@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 from waitress import serve
+from bots.vk_bot import bot
 
 from data import db_session
 from data.user import User
@@ -27,6 +28,7 @@ app.register_blueprint(game_blueprint.blueprint)
 
 def main():
     load_dotenv(dotenv_path='data/.env')
+    bot()
     db_session.global_init('db/Petersburg.db')
     serve(app, host='0.0.0.0', port=5000)
     # app.run(host='127.0.0.1', port=1488)
