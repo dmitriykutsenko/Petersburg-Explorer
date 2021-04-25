@@ -22,15 +22,23 @@ def help(update, context):
 ☰ ☰ ☰ ☰ ☰ ☰ 
 
 ✅Лайфхак✅
-Перезапустите сайт
+Чтобы не было никаких вылетов или багов, просто не торопитесь🗿
+Наши сервера могут не успеть за вами. Давайте панорамам полностью прогружаться🙏
 
 Если же возникли вопросы, пишите на почту ✉''',
         reply_markup=markup)
 
 
+def start(update, context):
+    update.message.reply_text(
+        """Привет👋!
+Я - Explorer Bot🤖""",
+        reply_markup=markup)
+
+
 def site(update, context):
     update.message.reply_text(
-        "Сайт: http://petersburg-explorer.herokuapp.com",
+        "Сайт: http://petersburg-explorer.ru",
         reply_markup=markup)
 
 
@@ -53,6 +61,7 @@ def start_tgbot():
 
     dp = updater.dispatcher
 
+    dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("site", site))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("info", info))
