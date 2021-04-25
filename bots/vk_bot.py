@@ -4,10 +4,12 @@ import random
 import string
 
 import vk_api
+from dotenv import load_dotenv
 from pyowm import OWM
 from pyowm.utils.config import get_default_config
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
+load_dotenv(dotenv_path='data/.env')
 TOKEN = os.getenv('VK_TOKEN')
 API = os.getenv('VK_API')
 

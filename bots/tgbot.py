@@ -1,9 +1,11 @@
 import os
 
+from dotenv import load_dotenv
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import CommandHandler
 from telegram.ext import Updater
 
+load_dotenv(dotenv_path='data/.env')
 TOKEN = os.getenv('TELEGRAM_TOKEN')
 
 reply_keyboard = [['/infoⓘ', '/site🌐', '/help❔']]
