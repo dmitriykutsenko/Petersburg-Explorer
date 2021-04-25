@@ -20,10 +20,6 @@ def index():
         db_sess = db_session.create_session()
 
         gameSession = GameSession()
-        gameSession.setRound(1)
-        gameSession.setScore(0)
-        gameSession.setDestinationCoordinates("")
-        gameSession.setFinishCoordinates("")
 
         db_sess.add(gameSession)
         db_sess.commit()

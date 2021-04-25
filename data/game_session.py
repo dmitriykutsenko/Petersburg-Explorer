@@ -32,6 +32,12 @@ class GameSession(SqlAlchemyBase):
 
     user = orm.relation('User')
 
+    def __init__(self):
+        self.round = 1
+        self.totalScore = 0
+        self.finishCoordinatesList = ""
+        self.destinationCoordinatesList = ""
+
     def setRoundScore(self, roundNumber, score):
         if roundNumber == 1:
             self.firstRoundScore = score
