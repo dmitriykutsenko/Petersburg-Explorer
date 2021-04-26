@@ -46,7 +46,7 @@ def register():
             if send_email(session['User Email'],
                           'Регистрация в Petersburg Explorer',
                           email_text):
-                logging.info('Email letter was sent. Redirected to email verification handler')
+                logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                 return redirect('/email_verification')
 
             else:
@@ -54,7 +54,7 @@ def register():
                               'Регистрация в Petersburg Explorer',
                               email_text,
                               from_yandex=True):
-                    logging.info('Email letter was sent. Redirected to email verification handler')
+                    logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                     return redirect('/email_verification')
 
                 return render_template('register.html', title='Регистрация',
@@ -76,13 +76,13 @@ def email_verification():
             if session['Verification Code'] == form.code.data:
                 user = User(
                     name=session['User Nickname'],
-                    email=session['User Email'],
+                    email=session['User Email']
                 )
                 user.set_password(session['User Password'])
                 db_sess.add(user)
                 db_sess.commit()
 
-                logging.info('Added a new User')
+                logging.info('ADDED A NEW USER: name={}, email={}'.format(user.name, user.email))
 
                 return redirect('/login')
 
@@ -93,6 +93,7 @@ def email_verification():
         return render_template('email_verification.html', title='Подтверждение', form=form)
 
     except Exception:
+        logging.fatal("ERROR OCCURED DURING VERIFICATING USER'S EMAIL")
         return render_template('error.html')
 
 
@@ -113,6 +114,7 @@ def login():
         return render_template('login.html', title='Авторизация', form=form)
 
     except Exception:
+        logging.fatal('ERROR OCCURED DURING LOGINING')
         return render_template('error.html')
 
 
@@ -125,6 +127,7 @@ def profile():
         return render_template("profile.html", game_sessions=game_sessions)
 
     except Exception:
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(current_user.id))
         return render_template('error.html')
 
 
