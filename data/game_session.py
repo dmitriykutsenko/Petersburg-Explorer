@@ -14,8 +14,6 @@ class GameSession(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
 
-    completed = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-
     destinationCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     finishCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
