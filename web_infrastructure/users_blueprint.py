@@ -121,7 +121,7 @@ def login():
 def profile():
     try:
         db_sess = db_session.create_session()
-        game_sessions = db_sess.query(GameSession).filter((GameSession.user == current_user))
+        game_sessions = db_sess.query(GameSession).filter((GameSession.user_id == current_user.id))
         return render_template("profile.html", game_sessions=game_sessions)
 
     except Exception:

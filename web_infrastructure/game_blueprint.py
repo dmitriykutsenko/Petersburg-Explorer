@@ -158,20 +158,12 @@ def finish():
             gameSession.setRoundScore(i, plusScore)
             totalScore += plusScore
 
-        game_session = GameSession()
-
-        game_session.totalScore = totalScore
-        game_session.firstRoundScore = gameSession.firstRoundScore
-        game_session.secondRoundScore = gameSession.secondRoundScore
-        game_session.thirdRoundScore = gameSession.thirdRoundScore
-        game_session.fourthRoundScore = gameSession.fourthRoundScore
-
-        current_user.game_sessions.append(game_session)
-        db_sess.merge(current_user)
+        gameSession.setUser_id(current_user.id)
+        gameSession.setScore(totalScore)
 
         db_sess.commit()
 
-        logging.info("Gamession (id = {}) finished correctly".format(str(session['sessionId'])))
+        logging.info("Game session (id = {}) finished correctly".format(str(session['sessionId'])))
 
         return render_template('endgame.html', score=totalScore)
 

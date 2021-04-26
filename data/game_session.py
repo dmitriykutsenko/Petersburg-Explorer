@@ -30,8 +30,6 @@ class GameSession(SqlAlchemyBase):
     thirdRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     fourthRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
-    user = orm.relation('User')
-
     def __init__(self):
         self.round = 1
         self.totalScore = 0
@@ -59,3 +57,6 @@ class GameSession(SqlAlchemyBase):
 
     def setFinishCoordinates(self, coordinates):
         self.finishCoordinatesList = coordinates
+
+    def setUser_id(self, id):
+        self.user_id = id
