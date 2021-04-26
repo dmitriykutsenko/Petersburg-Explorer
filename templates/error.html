@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../static/css/start.css">
-    <div class="alert alert-warning" role="alert">
-        Произошла неизвестная ошибка
-    </div>
-    <b>Искренне просим у вас за это прощения</b>
-    <b>Мы обязательно это исправим</b>
-    <a href="/" class="btn btn-outline-light play_button">
-        Вернуться в главное меню
-    </a>
+<div class="alert alert-warning" align="center" role="alert">
+    <img src="../static/img/error.png" alt="" width="50" height="50">
+    Произошла неизвестная ошибка
+    <img src="../static/img/error.png" alt="" width="50" height="50">
+</div>
+<div align="center"><b>Искренне просим у вас за это прощения.</b></div>
+<div align="center"><b>Мы обязательно это исправим.</b></div>
+<a href="/" class="btn btn-outline-dark play_button"
+   style="position: absolute; left: calc(50% - 110px); margin-top: 10px;">
+    Вернуться в главное меню
+</a>
 
 {% endblock %}
