@@ -1,3 +1,4 @@
+import logging
 import random
 
 from flask import Blueprint, render_template, redirect, request, session
@@ -12,6 +13,8 @@ from score_scripts.parsers import toIntParser
 from score_scripts.score_count import count_score
 
 blueprint = Blueprint(__name__, 'game_blueprint', template_folder='templates')
+logging.basicConfig(level=logging.INFO, filename='logs.log',
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 
 @blueprint.route("/")
@@ -27,6 +30,7 @@ def index():
         db_sess = db_session.create_session()
         gameSession = db_sess.query(GameSession).all()[-1]
         session['sessionId'] = gameSession.id
+        logging.info("Started a new gamesession (id = {})".format(str(session['sessionId'])))
 
         return render_template('start.html')
 
@@ -44,9 +48,11 @@ def game_screen():
 
             currentRound = gameSession.round
             if str(currentRound) == '5':
+                logging.info("Redicrected gamesession (id = {}) to finish screen".format(str(session['sessionId'])))
                 return redirect('/finish_game/')
 
             if int(currentRound) > 5:
+                logging.fatal("Gamesession's round number became more than 5")
                 return render_template('error.html')
 
             cluster_id = random.randint(1, 7)
@@ -74,6 +80,8 @@ def game_screen():
 
             db_sess.commit()
 
+            logging.info("New destination coordinates were put correctly")
+
             return render_template('panorama.html',
                                    destination=list(panoramas_dict.keys())[ind2],
                                    x=start_coordinates[0],
@@ -81,6 +89,7 @@ def game_screen():
                                    round=currentRound)
 
         except Exception:
+            logging.fatal('Error occured in GET handler')
             return render_template('error.html')
 
     elif request.method == 'PUT':
@@ -99,9 +108,11 @@ def game_screen():
 
             gameSession.setFinishCoordinates(";".join(db_finish_coordinates))
             db_sess.commit()
+            logging.info("New finish coordinates were put correctly")
             return 'caught coordinates'
 
         except Exception:
+            logging.fatal('Error occured in PUT handler')
             return render_template('error.html')
 
     elif request.method == "POST":
@@ -113,13 +124,15 @@ def game_screen():
             currentRound += 1
             gameSession.setRound(currentRound)
 
-            print("ROUND UPDATED:", currentRound)
+            logging.info("Gamession's (id = {}) round updated to {}".format(str(session['sessionId']),
+                                                                            str(currentRound)))
 
             db_sess.commit()
 
             return redirect('/game/')
 
         except Exception:
+            logging.fatal('Error occured in POST handler')
             return render_template('error.html')
 
 
@@ -140,8 +153,6 @@ def finish():
             thisFinishCoordinates = finishCoordinates[i]
             thisDestinationCoordinates = destinationCoordinates[i]
 
-            print(thisFinishCoordinates, thisDestinationCoordinates)
-
             plusScore = count_score(toIntParser(thisFinishCoordinates.split()),
                                     toIntParser(thisDestinationCoordinates.split()))
             gameSession.setRoundScore(i, plusScore)
@@ -159,9 +170,14 @@ def finish():
         db_sess.merge(current_user)
 
         db_sess.commit()
+
+        logging.info("Gamession (id = {}) finished correctly".format(str(session['sessionId'])))
+
         return render_template('endgame.html', score=totalScore)
 
     except Exception:
+        logging.fatal('Error occured during counting total score in gamesession (id = {})'
+                      .format(str(session['sessionId'])))
         return render_template('error.html')
 
 

@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint, render_template, redirect, session
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -9,6 +11,9 @@ from email_scripts.mail_sender import send_email
 from forms.email_verification import EmailVerificationForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
+
+logging.basicConfig(level=logging.INFO, filename='logs.log',
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 blueprint = Blueprint(__name__, 'users_blueprint', template_folder='templates')
 
@@ -41,14 +46,15 @@ def register():
             if send_email(session['User Email'],
                           'Регистрация в Petersburg Explorer',
                           email_text):
+                logging.info('Email letter was sent. Redirected to email verification handler')
                 return redirect('/email_verification')
 
             else:
-
                 if send_email(session['User Email'],
                               'Регистрация в Petersburg Explorer',
                               email_text,
                               from_yandex=True):
+                    logging.info('Email letter was sent. Redirected to email verification handler')
                     return redirect('/email_verification')
 
                 return render_template('register.html', title='Регистрация',
@@ -75,6 +81,8 @@ def email_verification():
                 user.set_password(session['User Password'])
                 db_sess.add(user)
                 db_sess.commit()
+
+                logging.info('Added a new User')
 
                 return redirect('/login')
 
