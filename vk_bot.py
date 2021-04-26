@@ -36,10 +36,12 @@ def bot():
             if event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'команды':
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"1. Сайт \n"
-                                         f"2. Информация\n"
-                                         f"3. Время \n"
-                                         f"4. Дата \n"
-                                         f"5. Погода \n"
+                                         f"2. Гитхаб\n"
+                                         f"3. Информация\n"
+                                         f"4. Время \n"
+                                         f"5. Дата \n"
+                                         f"6. Погода\n"
+                                         f"7. Жалоба\n"
                                          f"Также вы можете немного поговорить с ним, используя обычные фразы.",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'сайт':
@@ -48,6 +50,10 @@ def bot():
                                  random_id=random.randint(0, 2 ** 64))
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Если ВКонтакте не открывает ссылку, то просто вставьте ее в браузер",
+                                 random_id=random.randint(0, 2 ** 64))
+            elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'гитхаб':
+                vk.messages.send(user_id=event.obj.message['from_id'],
+                                 message=f"https://github.com/dmtrkv/Petersburg_Explorer",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'информация':
                 vk.messages.send(user_id=event.obj.message['from_id'],
@@ -74,6 +80,16 @@ def bot():
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Сейчас в городе Санкт-Петербурге " + str(int(temperature)) + " °С",
                                  random_id=random.randint(0, 2 ** 64))
+
+            elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'жалоба':
+                vk.messages.send(user_id=event.obj.message['from_id'],
+                                 message=f"Пожалуйста, опишите проблему максимально подробно.",
+                                 random_id=random.randint(0, 2 ** 64))
+                for event in longpoll.listen():
+                    if event.type == VkBotEventType.MESSAGE_NEW:
+                        # print(event.obj.message['text'].lower().rstrip(string.punctuation).strip())
+
+
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() in hello_words:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Привет, {first_name}!",
