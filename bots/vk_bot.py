@@ -20,6 +20,7 @@ yes_words = ['да', 'конечно', 'абсолютно', 'верно', 'то
 no_words = ['нет']
 how_are_u_words = ['как дела', 'как жизнь', 'все хорошо']
 
+now = datetime.datetime.now()
 
 def bot():
     vk_session = vk_api.VkApi(
@@ -37,12 +38,13 @@ def bot():
             if event.obj.message['text'].lower().rstrip(string.punctuation).strip() == 'начать':
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Команды нашего бота: \n"
-                                         f"1. !Сайт \n"
-                                         f"2. !Гитхаб\n"
-                                         f"3. !Информация\n"
-                                         f"4. !Время \n"
-                                         f"5. !Дата \n"
-                                         f"6. !Погода\n"
+                                         f"1. !сайт \n"
+                                         f"2. !гитхаб\n"
+                                         f"3. !информация\n"
+                                         f"4. !время \n"
+                                         f"5. !дата \n"
+                                         f"6. !погода\n"
+                                         f"7. !жалоба"
                                          f"Также вы можете немного поговорить с ним, используя обычные фразы.",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!сайт':
@@ -63,12 +65,10 @@ def bot():
                                          "Чем ближе вы придёте к месту назначения, тем больше очков вы получите! Так что вперёд гулять по нашему любимому городу!",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!дата':
-                now = datetime.datetime.now()
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=now.strftime("%d-%m-%Y"),
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation) == '!время':
-                now = datetime.datetime.now()
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=now.strftime("%H:%M:%S"),
                                  random_id=random.randint(0, 2 ** 64))
@@ -82,6 +82,10 @@ def bot():
                 temperature = pogoda.temperature('celsius')['temp']
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Сейчас в городе Санкт-Петербурге " + str(int(temperature)) + " °С",
+                                 random_id=random.randint(0, 2 ** 64))
+            elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!жалоба':
+                vk.messages.send(user_id=event.obj.message['from_id'],
+                                 message=f"По этой ссылке вы можете оставить жалобу: https://vk.com/topic-203903199_47565813",
                                  random_id=random.randint(0, 2 ** 64))
 
 
@@ -108,13 +112,14 @@ def bot():
             else:
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Я не понимаю вас."
-                                         f"Команды нашего бота: \n"
-                                         f"1. !Сайт \n"
-                                         f"2. !Гитхаб\n"
-                                         f"3. !Информация\n"
-                                         f"4. !Время \n"
-                                         f"5. !Дата \n"
-                                         f"6. !Погода\n",
+                                         f" Команды нашего бота: \n"
+                                         f"1. !сайт \n"
+                                         f"2. !гитхаб\n"
+                                         f"3. !информация\n"
+                                         f"4. !время \n"
+                                         f"5. !дата \n"
+                                         f"6. !погода\n"
+                                         f"7. !жалоба",
                                  random_id=random.randint(0, 2 ** 64))
 
 
