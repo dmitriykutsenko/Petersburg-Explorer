@@ -46,6 +46,9 @@ def game_screen():
             if str(currentRound) == '5':
                 return redirect('/finish_game/')
 
+            if int(currentRound) > 5:
+                return render_template('error.html')
+
             cluster_id = random.randint(1, 7)
 
             panoramas_dict, ind1, ind2 = get_panoramas_data(str(cluster_id))

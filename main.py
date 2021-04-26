@@ -1,10 +1,7 @@
-import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 from waitress import serve
-from bots.vk_bot import bot
-from bots.tgbot import start_tgbot
 
 from data import db_session
 from data.user import User

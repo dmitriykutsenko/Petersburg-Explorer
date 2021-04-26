@@ -44,6 +44,13 @@ def register():
                 return redirect('/email_verification')
 
             else:
+
+                if send_email(session['User Email'],
+                              'Регистрация в Petersburg Explorer',
+                              email_text,
+                              from_yandex=True):
+                    return redirect('/email_verification')
+
                 return render_template('register.html', title='Регистрация',
                                        form=form,
                                        message="К сожалению, письмо не было отправлено. Попробуйте еще раз")
