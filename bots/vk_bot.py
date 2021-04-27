@@ -69,8 +69,9 @@ def bot():
                                  message=now.strftime("%d-%m-%Y"),
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation) == '!время':
+                right_time = int(now.strftime("%H")) + 3
                 vk.messages.send(user_id=event.obj.message['from_id'],
-                                 message=now.strftime("%H:%M:%S"),
+                                 message=now.strftime(f"{right_time}:%M:%S"),
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation) == '!погода':
                 config_dict = get_default_config()
