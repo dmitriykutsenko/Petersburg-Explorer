@@ -41,10 +41,9 @@ def bot():
                                          f"1. !сайт \n"
                                          f"2. !гитхаб\n"
                                          f"3. !информация\n"
-                                         f"4. !время \n"
-                                         f"5. !дата \n"
-                                         f"6. !погода\n"
-                                         f"7. !жалоба"
+                                         f"4. !дата \n"
+                                         f"5. !погода\n"
+                                         f"6. !жалоба"
                                          f"Также вы можете немного поговорить с ним, используя обычные фразы.",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!сайт':
@@ -67,11 +66,6 @@ def bot():
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!дата':
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=now.strftime("%d-%m-%Y"),
-                                 random_id=random.randint(0, 2 ** 64))
-            elif event.obj.message['text'].lower().rstrip(string.punctuation) == '!время':
-                right_time = int(now.strftime("%H")) + 3
-                vk.messages.send(user_id=event.obj.message['from_id'],
-                                 message=now.strftime(f"{right_time}:%M:%S"),
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation) == '!погода':
                 config_dict = get_default_config()
@@ -117,10 +111,9 @@ def bot():
                                          f"1. !сайт \n"
                                          f"2. !гитхаб\n"
                                          f"3. !информация\n"
-                                         f"4. !время \n"
-                                         f"5. !дата \n"
-                                         f"6. !погода\n"
-                                         f"7. !жалоба",
+                                         f"4. !дата \n"
+                                         f"5. !погода\n"
+                                         f"6. !жалоба",
                                  random_id=random.randint(0, 2 ** 64))
 
 
