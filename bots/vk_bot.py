@@ -41,9 +41,8 @@ def bot():
                                          f"1. !сайт \n"
                                          f"2. !гитхаб\n"
                                          f"3. !информация\n"
-                                         f"4. !дата \n"
-                                         f"5. !погода\n"
-                                         f"6. !жалоба"
+                                         f"4. !погода\n"
+                                         f"5. !жалоба\n"
                                          f"Также вы можете немного поговорить с ним, используя обычные фразы.",
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!сайт':
@@ -63,10 +62,6 @@ def bot():
                                          "В процессе игры вы будете гулять по городу. Вам нужно будет дойти до определённого места. "
                                          "Чем ближе вы придёте к месту назначения, тем больше очков вы получите! Так что вперёд гулять по нашему любимому городу!",
                                  random_id=random.randint(0, 2 ** 64))
-            elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!дата':
-                vk.messages.send(user_id=event.obj.message['from_id'],
-                                 message=now.strftime("%d-%m-%Y"),
-                                 random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation) == '!погода':
                 config_dict = get_default_config()
                 config_dict['language'] = 'ru'
@@ -80,7 +75,7 @@ def bot():
                                  random_id=random.randint(0, 2 ** 64))
             elif event.obj.message['text'].lower().rstrip(string.punctuation).strip() == '!жалоба':
                 vk.messages.send(user_id=event.obj.message['from_id'],
-                                 message=f"По этой ссылке вы можете оставить жалобу: https://vk.com/topic-203903199_47565813",
+                                 message=f"По этой ссылке вы можете оставить жалобу: https://vk.com/topic-203903199_47567522",
                                  random_id=random.randint(0, 2 ** 64))
 
 
@@ -111,9 +106,8 @@ def bot():
                                          f"1. !сайт \n"
                                          f"2. !гитхаб\n"
                                          f"3. !информация\n"
-                                         f"4. !дата \n"
-                                         f"5. !погода\n"
-                                         f"6. !жалоба",
+                                         f"4. !погода\n"
+                                         f"5. !жалоба",
                                  random_id=random.randint(0, 2 ** 64))
 
 
