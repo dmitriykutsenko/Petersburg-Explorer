@@ -81,8 +81,7 @@ def commands(update, context):
 
 
 def start_tgbot():
-    load_dotenv(dotenv_path='data/.env')
-    TOKEN = os.getenv('TELEGRAM_TOKEN')
+    TOKEN = '1601660987:AAFILhhRQsXaGTYyEkqjOLh-IdUaX99fsgs'
     updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher

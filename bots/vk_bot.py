@@ -9,9 +9,9 @@ from pyowm import OWM
 from pyowm.utils.config import get_default_config
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
-load_dotenv(dotenv_path='data/.env')
-TOKEN = os.getenv('VK_TOKEN')
-API = os.getenv('VK_API')
+TOKEN = '9a91352c9040eb78f534e8b0d69cb6c3409aabc434dce6e3fe4283c8f5ff08b7c364c766e22fc0fd157b8'
+API = 'efe788c9ea7384d848c36fe48753fa66'
+VK_GROUP_ID = 203903199
 
 bad_words = ['какашка', 'тупой', 'плохой', 'ужасный', 'нехороший', 'соси', 'салют', 'дибил']
 hello_words = ['привет', 'хай', 'здарова']
@@ -22,12 +22,12 @@ how_are_u_words = ['как дела', 'как жизнь', 'все хорошо'
 
 now = datetime.datetime.now()
 
+
 def bot():
     vk_session = vk_api.VkApi(
         token=TOKEN)
 
-    group_id = int(os.getenv("VK_GROUP_ID"))
-    longpoll = VkBotLongPoll(vk_session, group_id)
+    longpoll = VkBotLongPoll(vk_session, VK_GROUP_ID)
 
     vk = vk_session.get_api()
 
