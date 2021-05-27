@@ -4,12 +4,17 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def send_email(email, subject, text, from_yandex=False):
+def send_email(email, subject, text, from_yandex=False, from_second=False):
     try:
         if from_yandex:
             addr_from = os.getenv('YANDEX_FROM')
             password = os.getenv('YANDEX_PASSWORD')
             host = os.getenv('YANDEX_HOST')
+
+        elif from_second:
+            addr_from = os.getenv("FROM2")
+            password = os.getenv("PASSWORD2")
+            host = os.getenv('HOST')
 
         else:
             addr_from = os.getenv("FROM")

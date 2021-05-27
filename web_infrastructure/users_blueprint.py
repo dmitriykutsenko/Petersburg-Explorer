@@ -53,9 +53,17 @@ def register():
                 if send_email(session['User Email'],
                               'Регистрация в Petersburg Explorer',
                               email_text,
-                              from_yandex=True):
+                              from_second=True):
                     logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                     return redirect('/email_verification')
+
+                else:
+                    if send_email(session['User Email'],
+                                  'Регистрация в Petersburg Explorer',
+                                  email_text,
+                                  from_yandex=True):
+                        logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
+                        return redirect('/email_verification')
 
                 return render_template('register.html', title='Регистрация',
                                        form=form,
