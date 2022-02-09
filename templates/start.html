@@ -41,30 +41,13 @@
 </div>
 
 {% if current_user.is_authenticated %}
-<a href="/game/" class="btn btn-outline-light play_button">
+<a href="/game/" class="btn btn-outline-light play-button">
     Играть
 </a>
 {% else %}
-<a href="/login" class="btn btn-outline-light play_button">
+<a href="/login" class="btn btn-outline-light play-button">
     Играть
 </a>
 {% endif %}
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

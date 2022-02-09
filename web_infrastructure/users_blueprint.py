@@ -15,7 +15,7 @@ from forms.register import RegisterForm
 logging.basicConfig(level=logging.INFO, filename='logs.log',
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
-blueprint = Blueprint(__name__, 'users_blueprint', template_folder='templates')
+blueprint = Blueprint('users_blueprint', __name__, template_folder='templates')
 
 
 @blueprint.route("/signup", methods=['GET', 'POST'])
@@ -36,7 +36,8 @@ def register():
             verification_code = generate_code()
 
             email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
-                         "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
+                         "Если это вы, введите данный код в соответствующее поле: {}".format(
+                             verification_code)
 
             session['Verification Code'] = verification_code
             session['User Email'] = form.email.data
@@ -46,7 +47,8 @@ def register():
             if send_email(session['User Email'],
                           'Регистрация в Petersburg Explorer',
                           email_text):
-                logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
+                logging.info(
+                    'EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                 return redirect('/email_verification')
 
             else:
@@ -54,7 +56,8 @@ def register():
                               'Регистрация в Petersburg Explorer',
                               email_text,
                               from_second=True):
-                    logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
+                    logging.info(
+                        'EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                     return redirect('/email_verification')
 
                 else:
@@ -62,7 +65,8 @@ def register():
                                   'Регистрация в Petersburg Explorer',
                                   email_text,
                                   from_yandex=True):
-                        logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
+                        logging.info(
+                            'EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                         return redirect('/email_verification')
 
                 return render_template('register.html', title='Регистрация',
@@ -90,7 +94,8 @@ def email_verification():
                 db_sess.add(user)
                 db_sess.commit()
 
-                logging.info('ADDED A NEW USER: name={}, email={}'.format(user.name, user.email))
+                logging.info('ADDED A NEW USER: name={}, email={}'.format(
+                    user.name, user.email))
 
                 return redirect('/login')
 
@@ -111,7 +116,8 @@ def login():
         form = LoginForm()
         if form.validate_on_submit():
             db_sess = db_session.create_session()
-            user = db_sess.query(User).filter(User.email == form.email.data).first()
+            user = db_sess.query(User).filter(
+                User.email == form.email.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user, remember=form.remember_me.data)
                 return redirect("/")
@@ -131,11 +137,13 @@ def login():
 def profile():
     try:
         db_sess = db_session.create_session()
-        game_sessions = db_sess.query(GameSession).filter((GameSession.user_id == current_user.id))
+        game_sessions = db_sess.query(GameSession).filter(
+            (GameSession.user_id == current_user.id))
         return render_template("profile.html", game_sessions=game_sessions)
 
     except Exception:
-        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(current_user.id))
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
+            current_user.id))
         return render_template('error.html')
 
 
