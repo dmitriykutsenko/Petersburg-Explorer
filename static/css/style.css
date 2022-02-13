@@ -114,6 +114,13 @@ html, body {
     background-color: #e4405f;
   }
 
+.block__signup{
+    display: inline;
+}
+.block__login{
+    display: inline;
+}
+
 .player {
     max-width: 100%;
     min-height: 700px;
