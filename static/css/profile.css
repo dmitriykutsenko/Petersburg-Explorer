@@ -1,40 +1,45 @@
-.rounds ul{
-    position: absolute;
-    z-index: 100;
+.game-history{
     display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.rounds ul li {
-    list-style: none;
-    margin: 0 40px;
-}
-
-.game_session{
-    position: relative;
-    margin: 10px;
+.game-session{
     border-radius: 35px;
     padding: 10px;
     border: 1px solid #000;
-    font-size: 16pt;
-    min-height: 100px;
-    max-width:860px;
-    left: calc(50% - 430px)
+    width: 90%;
+    font-size: 3vw;
+}
+
+.rounds{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rounds-element{
+    padding: 0px 5px;
+    flex: 0 1 20%;
 }
 
 body{
     text-align: center;
 }
 
-.game_label{
-    font-size: 18pt;
+.game-label{
+    font-size: 5vw;
     font-weight: 500;
 }
 
-.user_info{
+.date-label{
+    font-size: 4vw;
+}
+
+.user-info{
     padding-top: 10px;
     display: block;
 }
 
-.info_label{
+.info-label{
     font-size: 18pt;
 }

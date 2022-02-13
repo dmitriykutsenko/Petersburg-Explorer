@@ -26,8 +26,8 @@
 
     <div class="wrapper">
         <nav class="block">
-            <div>
-                <a class="block__column block__logo" href="/">
+            <div class="block__column block__logo">
+                <a href="/">
                     <img src="../static/img/logo.png" alt="" width="60" height="60">
                 </a>
             </div>
@@ -71,6 +71,7 @@
                     </div>
                 </div>
                 {% else %}
+                <div class="block__signin"><a href="/register" class="btn btn-outline-light btn-sm">Sign in</a></div>
                 <div class="block__login"><a href="/login" class="btn btn-outline-light btn-sm">Log in</a></div>
                 {% endif %}
             </div>

@@ -1,27 +1,17 @@
-.bar-wrap{
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+.endgame-block{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.wrap{
-    position:absolute;
-    top: 30%;
+.endgame-block__bar{
+  padding: 0px 0px 30px 0px;
+  width: 90%;
 }
 
-main{
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-
-body{
-    text-align: center;
-}
-
-.meter {
+.bar-meter {
   box-sizing: content-box;
   height: 20px; /* Can be anything */
   position: relative;
@@ -31,7 +21,7 @@ body{
   padding: 10px;
   box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
 }
-.meter > span {
+.bar-meter > span {
   display: block;
   height: 100%;
   border-top-right-radius: 8px;
@@ -101,6 +91,3 @@ body{
 }
 
 
-.bar{
-    width: 700px;
-}
