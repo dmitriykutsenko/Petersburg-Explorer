@@ -3,7 +3,7 @@ html, body {
     width: 100%;
 }
 
-.wrapper {
+.wrapper{
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -28,8 +28,6 @@ html, body {
             align-items: center;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    -ms-flex-preferred-size: 70px;
-      flex-basis: 70px;
     
   }
   
@@ -39,15 +37,14 @@ html, body {
             flex-grow: 0;
     -ms-flex-negative: 1;
         flex-shrink: 1;
-    flex-basis: auto;
   }
   
  .block__logo{
-     padding: 0px 0px 0px 10px;
+     padding: 0px 0px 0px 1rem;
  }
 
  .block__profilelogin{
-     padding: 0px 10px 0px 0px;
+     padding: 0px 1rem 0px 0px;
  }
   
   .block__social-menu {
@@ -128,85 +125,121 @@ html, body {
     overflow: auto;
 }
 
-.wrap_for_panorama {
+.wrap-for-panorama {
     position: relative;
     max-width: 100%;
     min-height: 700px;
     max-height: 810px;
-    margin-right: 12px;
-    margin-left: 10px;
-    margin-top: 10px;
+    margin: 10px;
     padding:2px;
+    display: flex;
+    flex-direction: column;
 }
 
-.game_status {
+
+.game-info{
+    display: flex;
+    justify-content: end;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+}
+
+.game-status {
     width: 80px;
     height: 55px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 99;
+    margin: 10px;
     box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
     background: #fff;
-    padding: .5rem 1.5rem;
     border-radius: .25rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
 .destination {
-    position: absolute;
-    right: 100px;
-    top: 15px;
-    z-index: 99;
     box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
     background: #fff;
-    padding: .5rem 3rem;
+    padding: 0.5em 0.5em;
+    margin: 10px;
     border-radius: .30rem;
     display: flex;
     align-items: center;
     font-size: 16pt;
 }
 
-.destination_name {
-    margin: 0
-}
-
 .round {
-    position: absolute;
-    top: 0;
     font-size: 16pt;
 }
 
-.round_number {
-    position: absolute;
-    bottom: 0;
+.round-number {
     font-size: 16pt;
 }
 
-.wrap_for_btn {
-    min-width: 800px;
-    max-width: 1200px;
-    height: 75px;
-    margin-right:350px;
-    margin-left: 170px;
-    margin-top: 10px;
-    position: relative;
-    padding: 2px;
-}
 
-.complete_round {
+.complete-round {
     width: 240px;
     height: 60px;
     position: absolute;
     bottom: 2%;
-    left: 0.4%;
+    left: 2%;
     border-radius: 100px;
 }
 
 .dropdown-menu{
     z-index: 100;
 }
+
+
+
+@media screen and (max-width: 786px){
+    
+    .destination{
+        font-size: 20px;
+    }
+
+    .round{
+        font-size: 20px;
+    }
+    .round-number{
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 425px){
+    
+    .destination{
+        font-size: 17px;
+    }
+
+    .round{
+        font-size: 17px;
+    }
+    .round-number{
+        font-size: 19px;
+    }
+}
+
+
+@media screen and (max-width: 800px){
+    .complete-round {
+        position: static;
+        width: 240px;
+        height: 60px;
+        border-radius: 100px;
+        margin: 10px 0;
+        align-self: center;
+    }
+    
+}
+
+@media screen and (max-height: 700px){
+    
+    .wrap-for-panorama{
+        height: 90%;
+    }
+}
+
 
 

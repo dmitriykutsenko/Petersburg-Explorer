@@ -139,7 +139,7 @@ def profile():
         db_sess = db_session.create_session()
         game_sessions = db_sess.query(GameSession).filter(
             (GameSession.user_id == current_user.id))
-        return render_template("profile.html", game_sessions=game_sessions)
+        return render_template("profile.html", game_sessions=reversed(list(game_sessions)))
 
     except Exception:
         logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(

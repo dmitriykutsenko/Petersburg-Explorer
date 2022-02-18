@@ -5,28 +5,28 @@
 <head>
     <link rel="stylesheet" href="../static/css/profile.css" type="text/css">
 </head>
-
-<div class="user-info">
-    <img src="../static/img/user.png" alt="..." width="230" height="230">
-    <div class="info-label">Имя: {{ current_user.name }}</div>
-    <div class="info-label">Почта: {{ current_user.email }}</div>
-    <div class="info-label">С нами с {{ current_user.created_date }}</div>
-</div>
-<br>
-<div class="game-history">
-    <h2>История игр</h2>
-    {% for item in game_sessions%}
-    <span class="game-label">Игра № {{ loop.index }}</span> <span class="date-label">({{ item.date }})</span>
-    <div class="game-session">
-        <div class="rounds">
-            <div class="rounds-element">Раунд-1 <br> {{item.firstRoundScore}}</div>
-            <div class="rounds-element">Раунд-2 <br> {{item.secondRoundScore}}</div>
-            <div class="rounds-element">Раунд-3 <br> {{item.thirdRoundScore}}</div>
-            <div class="rounds-element">Раунд-4 <br> {{item.fourthRoundScore}}</div>
-            <div class="rounds-element">Результат <br> {{ item.totalScore }}</div>
-        </div>
+<div class="container">
+    <div class="user-info">
+        <img src="../static/img/user.png" alt="..." width="230" height="230">
+        <div class="info-label">Имя: {{ current_user.name }}</div>
+        <div class="info-label">Почта: {{ current_user.email }}</div>
+        <div class="info-label">С нами с {{ current_user.created_date }}</div>
     </div>
-    {% endfor %}
+    <div class="game-history">
+        <div class="hist-label">История игр</div>
+        {% for item in game_sessions%}
+        <span class="game-label">Игра № {{ loop.revindex }}</span> <span class="date-label">({{ item.date }})</span>
+        <div class="game-session">
+
+            <div class="game-session-element">Раунд-1 <br> {{item.firstRoundScore}}</div>
+            <div class="game-session-element">Раунд-2 <br> {{item.secondRoundScore}}</div>
+            <div class="game-session-element">Раунд-3 <br> {{item.thirdRoundScore}}</div>
+            <div class="game-session-element">Раунд-4 <br> {{item.fourthRoundScore}}</div>
+            <div class="game-session-element">Всего <br> {{ item.totalScore }}</div>
+
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
