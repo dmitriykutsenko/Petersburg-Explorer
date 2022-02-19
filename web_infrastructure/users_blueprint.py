@@ -1,7 +1,9 @@
 import logging
+from re import S
 
 from flask import Blueprint, render_template, redirect, session
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy import delete
 
 from data import db_session
 from data.game_session import GameSession
@@ -137,9 +139,33 @@ def login():
 def profile():
     try:
         db_sess = db_session.create_session()
+        # empty_sessions = db_sess.query(GameSession).filter(
+        #    (GameSession.user_id == None))
+        # for sess in empty_sessions:
+        #    db_sess.delete(sess)
         game_sessions = db_sess.query(GameSession).filter(
             (GameSession.user_id == current_user.id))
+        # db_sess.commit()
         return render_template("profile.html", game_sessions=reversed(list(game_sessions)))
+
+    except Exception:
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
+            current_user.id))
+        return render_template('error.html')
+
+
+@blueprint.route('/delete_history')
+@login_required
+def delete_history():
+    try:
+        db_sess = db_session.create_session()
+
+        game_sessions = db_sess.query(GameSession).filter(
+            (GameSession.user_id == current_user.id))
+        for sess in game_sessions:
+            db_sess.delete(sess)
+        db_sess.commit()
+        return redirect('/profile')
 
     except Exception:
         logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(

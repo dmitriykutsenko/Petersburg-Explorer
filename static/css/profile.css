@@ -24,6 +24,7 @@
 }
 
 .hist-label{
+    display: inline;
     font-size: 3.5vw;
     font-weight: 550;
 }

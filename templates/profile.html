@@ -13,7 +13,11 @@
         <div class="info-label">С нами с {{ current_user.created_date }}</div>
     </div>
     <div class="game-history">
-        <div class="hist-label">История игр</div>
+        <div class="hist-label">
+            История игр
+            <a href="/delete_history"><button type="button" class="btn btn-outline-danger" href>Очистить</button></a>
+        </div>
+
         {% for item in game_sessions%}
         <span class="game-label">Игра № {{ loop.revindex }}</span> <span class="date-label">({{ item.date }})</span>
         <div class="game-session">

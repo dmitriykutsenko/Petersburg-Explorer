@@ -177,13 +177,15 @@ html, body {
     font-size: 16pt;
 }
 
+.complete-form{
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
+}
 
 .complete-round {
     width: 240px;
     height: 60px;
-    position: absolute;
-    bottom: 2%;
-    left: 2%;
     border-radius: 100px;
 }
 
@@ -224,14 +226,16 @@ html, body {
 
 @media screen and (max-width: 800px){
     .complete-round {
-        position: static;
         width: 240px;
         height: 60px;
         border-radius: 100px;
         margin: 10px 0;
-        align-self: center;
     }
     
+    .complete-form{
+        position: static;
+        align-self: center;
+    }
 }
 
 @media screen and (max-height: 700px){
