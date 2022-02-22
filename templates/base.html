@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.ico') }}">
     <title>Peterburg Explorer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,14 +31,14 @@
     </div>
     <div class="social-menu">
         <ul>
-            <li><a href="#vk"><i class="fab fa-vk "></i></a></li>
-            <li><a href="https://tgclick.com/peterburgexplorer_bot"><i class="fab fa-telegram"></i></a></li>
-            <li><a href="#ds"><i class="fab fa-discord"></i></a></li>
+            <li><a href="https://vk.com/petersburgexplorer"><i class="fab fa-vk "></i></a></li>
+            <li><a href="https://t.me/peterburgexplorer_bot"><i class="fab fa-telegram"></i></a></li>
+            <li><a href="/info/"><i class="fas fa-info-circle"></i></a></li>
         </ul>
     </div>
     <span>
         {% if current_user.is_authenticated %}
-    <div class="dropdown">
+            <div class="dropdown">
       <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
          data-bs-toggle="dropdown"
          aria-expanded="false">
@@ -46,15 +47,14 @@
       </a>
 
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li><a class="dropdown-item" href="#">Профиль</a></li>
-          <li><a class="dropdown-item" href="#">Настройки</a></li>
+          <li><a class="dropdown-item" href="/profile">Профиль</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="/logout">Выйти</a></li>
       </ul>
     </div>
 
 
-    </span>
+            </span>
 
 
     {% else %}

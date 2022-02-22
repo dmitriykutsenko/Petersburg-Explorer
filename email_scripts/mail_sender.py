@@ -1,25 +1,42 @@
-import smtplib
 import os
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def send_email(email, subject, text):
-    addr_from = os.getenv("FROM")
-    password = os.getenv("PASSWORD")
+def send_email(email, subject, text, from_yandex=False, from_second=False):
+    try:
+        if from_yandex:
+            addr_from = os.getenv('YANDEX_FROM')
+            password = os.getenv('YANDEX_PASSWORD')
+            host = os.getenv('YANDEX_HOST')
 
-    msg = MIMEMultipart()
-    msg['From'] = addr_from
-    msg['To'] = email
-    msg['Subject'] = subject
+        elif from_second:
+            addr_from = os.getenv("FROM2")
+            password = os.getenv("PASSWORD2")
+            host = os.getenv('HOST')
 
-    body = text
-    msg.attach(MIMEText(body, 'plain'))
+        else:
+            addr_from = os.getenv("FROM")
+            password = os.getenv("PASSWORD")
+            host = os.getenv('HOST')
 
-    server = smtplib.SMTP_SSL(os.getenv('HOST'), os.getenv('PORT'))
-    server.login(addr_from, password)
+        msg = MIMEMultipart()
+        msg['From'] = addr_from
+        msg['To'] = email
+        msg['Subject'] = subject
 
-    server.send_message(msg)
-    server.quit()
+        body = text
+        msg.attach(MIMEText(body, 'plain'))
 
-    return True
+        server = smtplib.SMTP_SSL(host, os.getenv('PORT'))
+        server.login(addr_from, password)
+
+        server.send_message(msg)
+        server.quit()
+
+        return True
+
+    except Exception as e:
+        print(e)
+        return False

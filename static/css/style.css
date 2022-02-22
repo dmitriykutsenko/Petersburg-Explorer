@@ -4,7 +4,7 @@ html, body {
 }
 
 .navbar{
-    background-color: #000;
+    background-color: #000000;
 }
 
 .player {
@@ -26,7 +26,7 @@ html, body {
 }
 
 .game_status {
-    width: 160px;
+    width: 80px;
     height: 55px;
     position: absolute;
     right: 10px;
@@ -36,11 +36,14 @@ html, body {
     background: #fff;
     padding: .5rem 1.5rem;
     border-radius: .25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .destination {
     position: absolute;
-    right: 180px;
+    right: 100px;
     top: 15px;
     z-index: 99;
     box-shadow: 0 2px 20px 0 rgba(26,26,26,0.1);
@@ -59,28 +62,12 @@ html, body {
 .round {
     position: absolute;
     top: 0;
-    left: 10%;
     font-size: 16pt;
 }
 
 .round_number {
     position: absolute;
     bottom: 0;
-    left: 18%;
-    font-size: 16pt;
-}
-
-.score {
-    position: absolute;
-    top: 0;
-    right: 10%;
-    font-size: 16pt;
-}
-
-.score_amount{
-    position: absolute;
-    bottom: 0;
-    right: 22%;
     font-size: 16pt;
 }
 

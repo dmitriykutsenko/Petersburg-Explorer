@@ -1,12 +1,11 @@
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
+from waitress import serve
 
 from data import db_session
 from data.user import User
 from web_infrastructure import users_blueprint, game_blueprint
-
-load_dotenv(dotenv_path='email_scripts/.env')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'petersburg_explorer_secret_key'
@@ -26,10 +25,10 @@ app.register_blueprint(game_blueprint.blueprint)
 
 
 def main():
+    load_dotenv(dotenv_path='data/.env')
     db_session.global_init('db/Petersburg.db')
-    port = int(os.environ.get('PORT', 5000))
-    app.run('0.0.0.0', port=port)
-
+    serve(app, host='0.0.0.0', port=5000)
+    # app.run(host='127.0.0.1', port=8888)
 
 
 if __name__ == '__main__':

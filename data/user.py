@@ -1,4 +1,3 @@
-
 import datetime
 import sqlalchemy
 from flask_login import UserMixin
@@ -21,8 +20,13 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                               index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
+    created_date = sqlalchemy.Column(sqlalchemy.Date, nullable=True, default=datetime.datetime.now)
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def __repr__(self):
+        return f"User (id: {self.id}, name: {self.name}, email: {self.email})"

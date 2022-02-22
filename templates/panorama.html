@@ -43,47 +43,23 @@
                 );
             });
 
-            function countScore(x, y) {
-                alert('called');
-                let pScore = document.getElementById("score");
-                pScore = Number(pScore);
-                const currentX = parseCoordinate(panorama.getPosition()[0]);
-                const currentY = parseCoordinate(panorama.getPosition()[1]);
-                let distance = Math.sqrt((Number(x) - currentX) * (Number(x) - currentX) + (Number(y) - currentY) * (Number(y) - currentY));
-                let resultScore = 10 / distance * 10000;
-                if (resultScore > 1000) {
-                    resultScore = 1000
-                }
-                alert('here1');
-                alert('here2');
-                const sqlite3 = require('sqlite3').verbose()
-                let db = new sqlite3.Database('../db/Petersburg.db')
+            function getCoordinates() {
+                const coordinates = JSON.stringify({
+                    "x": panorama.getPosition()[0],
+                    "y": panorama.getPosition()[1]
+                });
 
-                db.run('INSERT INTO game_sessions(totalScore) VALUES(?)', [228], function (err, row){
-                    if (err) {
-                        alert(err.message);
-                    }
-                    alert('added')
-                })
-                alert('aaaa');
-            }
-
-            function parseCoordinate(coordinate) {
-                let result = String(coordinate).replace(".", "");
-                if (result.length > 8) {
-                    result = result.substring(0, 8);
-                } else {
-                    let diff = 8 - result.length;
-                    for (let i = 0; i < diff; i++) {
-                        result += '0';
-                    }
-                }
-                return Number(result);
+                $.ajax({
+                    url: "/game/",
+                    type: "PUT",
+                    dataType: "json",
+                    data: coordinates
+                });
             }
         </script>
     </head>
 
-    <body onload="">
+    <body>
     <div class="wrap_for_panorama">
         <div class="game_status">
             <div class="round">
@@ -91,15 +67,6 @@
             </div>
             <div class="round_number">
                 {{ round }}
-            </div>
-            <div class="score">
-                Очки
-            </div>
-            <div class="score_amount" id="score">
-                <script>
-                    let element = document.getElementById('score');
-                    element.innerHTML = totalScore;
-                </script>
             </div>
         </div>
         <div class="destination">
@@ -109,13 +76,14 @@
         </div>
         <div id="player1" class="player"></div>
         <form>
-            <button type="submit" id="complete_btn" onclick="countScore({{ xCount }}, {{ yCount }})" formmethod="post"
+            <button type="submit" id="complete_btn" onclick="getCoordinates()" formmethod="post"
                     class="btn btn-success complete_round pull-right">
                 <i class="fas fa-check-square"></i>
                 Завершить раунд
             </button>
         </form>
     </div>
+
     </body>
 {% endblock %}
 

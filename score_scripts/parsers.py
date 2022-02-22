@@ -10,5 +10,9 @@ def parse_coordinates(coordinates):
         else:
             for j in range(8 - len(coordinates[i])):
                 coordinates[i] += "0"
+    return coordinates
+
+
+def toIntParser(coordinates):
     coordinates = [int(elem) for elem in coordinates]
     return coordinates
