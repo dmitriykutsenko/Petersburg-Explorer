@@ -25,59 +25,9 @@
 <body>
 
     <div class="wrapper">
-        <nav class="block">
-            <div class="block__column block__logo">
-                <a href="/">
-                    <img src="../static/img/logo.png" alt="" width="60" height="60">
-                </a>
-            </div>
-            <div class="block__column block__social-menu">
 
-                <div class="social-menu-element">
-                    <a href="https://vk.com/petersburgexplorer">
-                        <i class="fab fa-vk"></i>
+        {% include "navbar.html" %}
 
-                    </a>
-                </div>
-                <div class="social-menu-element">
-                    <a href="https://t.me/peterburgexplorer_bot">
-                        <i class="fab fa-telegram"></i>
-                    </a>
-                </div>
-                <div class="social-menu-element">
-                    <a href="/info/">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                </div>
-
-            </div>
-            <div class="block__column block__profilelogin">
-                <div class="block__profile">
-                    {% if current_user.is_authenticated %}
-                    <div class="dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i>
-                            {{ current_user.name }}
-                        </a>
-
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" href="/profile">Профиль</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="/logout">Выйти</a></li>
-                        </ul>
-                    </div>
-                </div>
-                {% else %}
-                <div class="block__signup"><a href="/signup" class="btn btn-outline-light btn-sm">Sign up</a></div>
-                <div class="block__login"><a href="/login" class="btn btn-outline-light btn-sm">Log in</a></div>
-                {% endif %}
-            </div>
-
-
-        </nav>
         {% block content %}
         {% endblock %}
 

@@ -2,20 +2,25 @@
 
 {% block content %}
 
+
+
 <head>
     <link rel="stylesheet" href="../static/css/profile.css" type="text/css">
 </head>
 <div class="container">
     <div class="user-info">
-        <img src="../static/img/user.png" alt="..." width="230" height="230">
-        <div class="info-label">Имя: {{ current_user.name }}</div>
-        <div class="info-label">Почта: {{ current_user.email }}</div>
-        <div class="info-label">С нами с {{ current_user.created_date }}</div>
+        <img class="user-logo" src="../static/img/user.png" alt="..." width="230" height="230">
+        <div class="info-label">Имя: {{ user.name }}</div>
+        <div class="info-label">Почта: {{ user.email }}</div>
+        <div class="info-label">С нами с {{ user.created_date }}</div>
     </div>
     <div class="game-history">
         <div class="hist-label">
             История игр
-            <a href="/delete_history"><button type="button" class="btn btn-outline-danger" href>Очистить</button></a>
+            {%if current_user.is_authenticated and user.id == current_user.id%}
+            <a href="/delete_history"><button type="button" class="btn btn-outline-danger"
+                    formmethod="post">Очистить</button></a>
+            {% endif %}
         </div>
 
         {% for item in game_sessions%}

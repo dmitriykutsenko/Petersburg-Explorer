@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="../static/css/form.css">
     <script src="https://kit.fontawesome.com/4da3397637.js" crossorigin="anonymous"></script>
@@ -11,8 +12,8 @@
 
     {{ form.hidden_tag() }}
     <span>
-    <i class="fas fa-envelope"></i>
-    {{ form.email.label }}<br>
+        <i class="fas fa-envelope"></i>
+        {{ form.email.label }}<br>
     </span>
     {{ form.email(class="form-control", type="email") }}<br>
     {% for error in form.email.errors %}
@@ -23,8 +24,8 @@
 
     <p>
         <span>
-        <i class="fas fa-lock"></i>
-        {{ form.password.label }}<br>
+            <i class="fas fa-lock"></i>
+            {{ form.password.label }}<br>
         </span>
         {{ form.password(class="form-control", type="password") }}
         {% for error in form.password.errors %}

@@ -3,7 +3,7 @@ html { overflow:  hidden; }
 .play-button{
     width: 120px;
     height: 60px;
-    z-index: 10000;
+    z-index: 1;
     position: absolute;
     left: calc(50% - 60px);
     top: 60%;

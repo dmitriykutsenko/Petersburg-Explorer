@@ -1,3 +1,4 @@
+import re
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
@@ -5,6 +6,7 @@ from waitress import serve
 
 from data import db_session
 from data.user import User
+from forms.search import SearchForm
 from web_infrastructure import users_blueprint, game_blueprint
 
 app = Flask(__name__)
@@ -18,6 +20,12 @@ login_manager.init_app(app)
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
+
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
 
 
 app.register_blueprint(users_blueprint.blueprint)

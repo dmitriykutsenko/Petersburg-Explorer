@@ -1,9 +1,7 @@
 import logging
-from re import S
 
-from flask import Blueprint, render_template, redirect, session
+from flask import Blueprint, render_template, redirect, session, request
 from flask_login import login_user, logout_user, login_required, current_user
-from sqlalchemy import delete
 
 from data import db_session
 from data.game_session import GameSession
@@ -13,6 +11,7 @@ from email_scripts.mail_sender import send_email
 from forms.email_verification import EmailVerificationForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
+from forms.search import SearchForm
 
 logging.basicConfig(level=logging.INFO, filename='logs.log',
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
@@ -90,7 +89,8 @@ def email_verification():
             if session['Verification Code'] == form.code.data:
                 user = User(
                     name=session['User Nickname'],
-                    email=session['User Email']
+                    email=session['User Email'],
+                    lower_name=session['User Nickname'].lower()
                 )
                 user.set_password(session['User Password'])
                 db_sess.add(user)
@@ -115,6 +115,7 @@ def email_verification():
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     try:
+
         form = LoginForm()
         if form.validate_on_submit():
             db_sess = db_session.create_session()
@@ -138,17 +139,10 @@ def login():
 @login_required
 def profile():
     try:
-        db_sess = db_session.create_session()
-        # empty_sessions = db_sess.query(GameSession).filter(
-        #    (GameSession.user_id == None))
-        # for sess in empty_sessions:
-        #    db_sess.delete(sess)
-        game_sessions = db_sess.query(GameSession).filter(
-            (GameSession.user_id == current_user.id))
-        # db_sess.commit()
-        return render_template("profile.html", game_sessions=reversed(list(game_sessions)))
+        return redirect('/users/{}'.format(current_user.name))
 
-    except Exception:
+    except Exception as e:
+        print(e)
         logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
             current_user.id))
         return render_template('error.html')
@@ -181,4 +175,46 @@ def logout():
         return redirect("/")
 
     except Exception:
+        return render_template('error.html')
+
+
+@blueprint.route('/users/<username>')
+def view_user(username):
+    try:
+
+        db_sess = db_session.create_session()
+
+        user = db_sess.query(User).filter(
+            (User.name == username)).first()
+        game_sessions = db_sess.query(GameSession).filter(
+            (GameSession.user_id == user.id))
+
+        return render_template("profile.html", game_sessions=reversed(list(game_sessions)), user=user)
+
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
+            current_user.id))
+        return render_template('error.html')
+
+
+@blueprint.route('/search', methods=['POST'])
+def search():
+    try:
+        form = SearchForm()
+
+        if form.validate_on_submit:
+            searched = form.searched.data
+            if searched:
+                db_sess = db_session.create_session()
+                users = db_sess.query(User).filter(
+                    User.lower_name.like('%' + searched.lower() + '%'))
+                users = users.order_by(User.name).all()
+            else:
+                users = []
+            return render_template('search.html', form=form, searched=searched, users=users)
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SEARCHING USER'S (NAME = {}) PROFILE".format(
+            searched))
         return render_template('error.html')

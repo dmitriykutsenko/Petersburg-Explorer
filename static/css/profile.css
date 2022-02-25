@@ -80,4 +80,9 @@
     .date-label{
         font-size: 20px;
     }
+
+    .user-logo{
+        width: 160px;
+        height: 160px;
+    }
 }
