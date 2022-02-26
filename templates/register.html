@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="../static/css/form.css">
     <script src="https://kit.fontawesome.com/4da3397637.js" crossorigin="anonymous"></script>
 </head>
-<h1>Регистрация</h1>
+<div class="form-label">Регистрация</div>
 <form class="form" action="" method="post">
     {{ form.hidden_tag() }}
     <p>
         <span>
-        <i class="fas fa-user-circle"></i>
-        {{ form.name.label }}<br>
+            <i class="fas fa-user-circle"></i>
+            {{ form.name.label }}<br>
         </span>
         {{ form.name(class="form-control") }}<br>
         {% for error in form.name.errors %}
@@ -20,20 +21,20 @@
     {% endfor %}
     <p>
         <span>
-        <i class="fas fa-lock"></i>
-        {{ form.password.label }}<br>
+            <i class="fas fa-lock"></i>
+            {{ form.password.label }}<br>
         </span>
 
-    {{ form.password(class="form-control", type="password") }}<br>
-    {% for error in form.password.errors %}
+        {{ form.password(class="form-control", type="password") }}<br>
+        {% for error in form.password.errors %}
     <p class="alert alert-danger" role="alert">
         {{ error }}
     </p>
     {% endfor %}
     <p>
         <span>
-        <i class="fas fa-lock"></i>
-        {{ form.password_again.label }}<br>
+            <i class="fas fa-lock"></i>
+            {{ form.password_again.label }}<br>
         </span>
         {{ form.password_again(class="form-control", type="password") }}<br>
         {% for error in form.password_again.errors %}
@@ -43,17 +44,16 @@
     {% endfor %}
     <p>
         <span>
-        <i class="fas fa-envelope"></i>
-        {{ form.email.label }}<br>
+            <i class="fas fa-envelope"></i>
+            {{ form.email.label }}<br>
         </span>
         {{ form.email(class="form-control", type="email") }}<br>
         {% for error in form.email.errors %}
-    <p class="alert alert-danger" role="alert">
-        {{ error }}
-    </p>
+    <p class="alert alert-danger" role="alert">{{ error }}</p>
     {% endfor %}
+    </p>
 
-    <p>{{ form.submit(type="submit", class="btn btn-outline-light submit_btn") }}</p>
-    {{message}}
+    {{ form.submit(type="submit", class="btn btn-outline-light submit-btn") }}
+    <div>{{message}}</div>
 </form>
 {% endblock %}

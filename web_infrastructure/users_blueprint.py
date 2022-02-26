@@ -205,14 +205,29 @@ def search():
 
         if form.validate_on_submit:
             searched = form.searched.data
-            if searched:
-                db_sess = db_session.create_session()
-                users = db_sess.query(User).filter(
-                    User.lower_name.like('%' + searched.lower() + '%'))
-                users = users.order_by(User.name).all()
-            else:
-                users = []
-            return render_template('search.html', form=form, searched=searched, users=users)
+
+            return redirect('/search/{}'.format(searched))
+        else:
+            pass
+
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SEARCHING USER'S (NAME = {}) PROFILE".format(
+            searched))
+        return render_template('error.html')
+
+
+@blueprint.route('/search/<searched>', methods=['GET'])
+def view_searched(searched):
+    try:
+        if searched:
+            db_sess = db_session.create_session()
+            users = db_sess.query(User).filter(
+                User.lower_name.like('%' + searched.lower() + '%'))
+            users = users.order_by(User.name).all()
+        else:
+            users = []
+        return render_template('search.html', searched=searched, users=users)
     except Exception as e:
         print(e)
         logging.fatal("ERROR OCCURED DURINGG SEARCHING USER'S (NAME = {}) PROFILE".format(

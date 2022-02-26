@@ -1,4 +1,7 @@
 form.form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     color: #fff;
     margin-left: auto;
     margin-right: auto;
@@ -14,25 +17,34 @@ form.form {
     display: inline-block;
 }
 
-h1 {
-    margin-top: 4vw;
+.form-label{
+    font-weight: 500;
     text-align: center;
+    font-size: calc(20px + 16 * (100vw / 1280));
 }
 
 .form-control {
     border-radius: 15px;
 }
 
-.submit_btn{
-    margin-left: calc(50% - 40px);
+.submit-btn{
     border-radius: 15px;
+    align-self: flex-end;
+    font-size: 1.2rem;
 }
 
-.reg_ref{
+.reg-ref{
     color: #fff;
 }
 
-.reg_ref a:hover{
+.reg-ref a:hover{
     color: #dcdde1;
+}
+
+@media screen and (max-width: 375px){
+    .submit-btn{
+        font-size: 1rem;
+    }
+
 }
 
