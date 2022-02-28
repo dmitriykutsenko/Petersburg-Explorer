@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 import os
 from pprint import pprint
 
@@ -8,6 +9,8 @@ from sib_api_v3_sdk.rest import ApiException
 
 def send_email(email, verification_code):
     api_key = os.getenv("SEND_IN_BLUE_KEY")
+    email_from = os.getenv("EMAIL_ADDRESS_FROM")
+
     configuration = sib_api_v3_sdk.Configuration()
     configuration.api_key['api-key'] = api_key
 
@@ -55,9 +58,9 @@ def send_email(email, verification_code):
         </html>'''
 
     sender = {"name": "Petersburg Explorer",
-              "email": "petersburg-explorer-game@yandex.ru"}
+              "email": email_from}
     to = [{"email": email}]
-    reply_to = {"email": "petersburg-explorer-game@yandex.ru",
+    reply_to = {"email": email_from,
                 "name": "Petersburg Explorer"}
     headers = {"Some-Custom-Name": "unique-id-1234"}
 
