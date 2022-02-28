@@ -35,37 +35,18 @@ def register():
 
             verification_code = generate_code()
 
-            email_text = "Кто-то пытается зарегистрироваться в игре Petersburg Explorer, исользуя данный email-адрес." \
-                         "Если это вы, введите данный код в соответствующее поле: {}".format(verification_code)
-
             session['Verification Code'] = verification_code
             session['User Email'] = form.email.data
             session['User Nickname'] = form.name.data
             session['User Password'] = form.password.data
 
-            if send_email(session['User Email'],
-                          'Регистрация в Petersburg Explorer',
-                          email_text):
-                logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
+            if send_email(session['User Email'], verification_code):
+                # logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
                 return redirect('/email_verification')
 
             else:
-                if send_email(session['User Email'],
-                              'Регистрация в Petersburg Explorer',
-                              email_text,
-                              from_second=True):
-                    logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
-                    return redirect('/email_verification')
-
-                else:
-                    if send_email(session['User Email'],
-                                  'Регистрация в Petersburg Explorer',
-                                  email_text,
-                                  from_yandex=True):
-                        logging.info('EMAIL LETTER WAS SENT. REDIRECTED TO EMAIL VERIFICATION HANDLER')
-                        return redirect('/email_verification')
-
-                return render_template('register.html', title='Регистрация',
+                return render_template('register.html',
+                                       title='Регистрация',
                                        form=form,
                                        message="К сожалению, письмо не было отправлено. Попробуйте еще раз")
 
