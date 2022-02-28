@@ -11,6 +11,7 @@ from email_scripts.mail_sender import send_email
 from forms.email_verification import EmailVerificationForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
+from forms.search import SearchForm
 
 logging.basicConfig(level=logging.INFO, filename='logs.log',
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
@@ -92,7 +93,8 @@ def login():
         form = LoginForm()
         if form.validate_on_submit():
             db_sess = db_session.create_session()
-            user = db_sess.query(User).filter(User.email == form.email.data).first()
+            user = db_sess.query(User).filter(
+                User.email == form.email.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user, remember=form.remember_me.data)
                 return redirect("/")
@@ -111,12 +113,31 @@ def login():
 @login_required
 def profile():
     try:
+        return redirect('/users/{}'.format(current_user.name))
+
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
+            current_user.id))
+        return render_template('error.html')
+
+
+@blueprint.route('/delete_history')
+@login_required
+def delete_history():
+    try:
         db_sess = db_session.create_session()
-        game_sessions = db_sess.query(GameSession).filter((GameSession.user_id == current_user.id))
-        return render_template("profile.html", game_sessions=game_sessions)
+
+        game_sessions = db_sess.query(GameSession).filter(
+            (GameSession.user_id == current_user.id))
+        for sess in game_sessions:
+            db_sess.delete(sess)
+        db_sess.commit()
+        return redirect('/profile')
 
     except Exception:
-        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(current_user.id))
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
+            current_user.id))
         return render_template('error.html')
 
 
@@ -128,4 +149,61 @@ def logout():
         return redirect("/")
 
     except Exception:
+        return render_template('error.html')
+
+
+@blueprint.route('/users/<username>')
+def view_user(username):
+    try:
+
+        db_sess = db_session.create_session()
+
+        user = db_sess.query(User).filter(
+            (User.name == username)).first()
+        game_sessions = db_sess.query(GameSession).filter(
+            (GameSession.user_id == user.id))
+
+        return render_template("profile.html", game_sessions=reversed(list(game_sessions)), user=user)
+
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SHOWING USER'S (id = {}) PROFILE".format(
+            current_user.id))
+        return render_template('error.html')
+
+
+@blueprint.route('/search', methods=['POST'])
+def search():
+    try:
+        form = SearchForm()
+
+        if form.validate_on_submit:
+            searched = form.searched.data
+
+            return redirect('/search/{}'.format(searched))
+        else:
+            pass
+
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SEARCHING USER'S (NAME = {}) PROFILE".format(
+            searched))
+        return render_template('error.html')
+
+
+@blueprint.route('/search/<searched>', methods=['GET'])
+def view_searched(searched):
+    try:
+        if searched:
+            db_sess = db_session.create_session()
+            users = db_sess.query(User).filter(
+                User.lower_name.like('%' + searched.lower() + '%'))
+            users = users.order_by(User.name).all()
+        else:
+            users = []
+        return render_template('search.html', searched=searched, users=users)
+    except Exception as e:
+        print(e)
+        logging.fatal("ERROR OCCURED DURINGG SEARCHING USER'S (NAME = {}) PROFILE".format(
+            searched))
         return render_template('error.html')
