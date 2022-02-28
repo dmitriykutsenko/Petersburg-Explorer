@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="../static/css/form.css">
     <script src="https://kit.fontawesome.com/4da3397637.js" crossorigin="anonymous"></script>
 </head>
-<h1>Авторизация</h1>
+<div class="form-label">Авторизация</div>
 <form class="form" action="" method="post">
 
 
     {{ form.hidden_tag() }}
     <span>
-    <i class="fas fa-envelope"></i>
-    {{ form.email.label }}<br>
+        <i class="fas fa-envelope"></i>
+        {{ form.email.label }}<br>
     </span>
     {{ form.email(class="form-control", type="email") }}<br>
     {% for error in form.email.errors %}
@@ -23,8 +24,8 @@
 
     <p>
         <span>
-        <i class="fas fa-lock"></i>
-        {{ form.password.label }}<br>
+            <i class="fas fa-lock"></i>
+            {{ form.password.label }}<br>
         </span>
         {{ form.password(class="form-control", type="password") }}
         {% for error in form.password.errors %}
@@ -35,14 +36,14 @@
     <p>
     <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
     <p>
-        <span class="reg_ref">
+        <span class="reg-ref">
             Не зарегистрированы?!? Сделайте это прямо сейчас!
-            <a class="reg_ref" href="/signup">
+            <a class="reg-ref" href="/signup">
                 Зарегистрироваться
             </a>
         </span>
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-outline-light submit_btn") }}</p>
+    {{ form.submit(type="submit", class="btn btn-outline-light submit-btn") }}
     <div>{{ message }}</div>
 </form>
 {% endblock %}

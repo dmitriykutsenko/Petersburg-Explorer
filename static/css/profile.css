@@ -1,40 +1,88 @@
-.rounds ul{
-    position: absolute;
-    z-index: 100;
-    display: flex;
-}
-
-.rounds ul li {
-    list-style: none;
-    margin: 0 40px;
-}
-
-.game_session{
-    position: relative;
-    margin: 10px;
-    border-radius: 35px;
-    padding: 10px;
-    border: 1px solid #000;
-    font-size: 16pt;
-    min-height: 100px;
-    max-width:860px;
-    left: calc(50% - 430px)
-}
-
-body{
+.container{
     text-align: center;
 }
 
-.game_label{
-    font-size: 18pt;
+.game-history{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-session{
+    border-radius: 35px;
+    padding: 10px;
+    border: 1px solid #000;
+    display: flex;
+    flex-wrap: wrap;
+    font-size:  calc(12px + 12 * (100vw / 1280));
+    width: 65%;
+}
+
+.game-session-element{
+    padding: 0px 0.1em;
+    flex: 0 1 20%;
+}
+
+.hist-label{
+    display: inline;
+    font-size: 3.5vw;
+    font-weight: 550;
+}
+
+.game-label{
+    font-size: 2.5vw;
     font-weight: 500;
 }
 
-.user_info{
+.date-label{
+    font-size: 2.2vw;
+}
+
+.user-info{
     padding-top: 10px;
     display: block;
 }
 
-.info_label{
-    font-size: 18pt;
+.info-label{
+    font-size: calc(20px + 10 * (100vw / 1280));
+}
+
+
+@media screen and (min-width: 1440px){
+    .hist-label{
+        font-size: 40px;
+    }
+    .game-label{
+        font-size: 34px;
+    }
+    .date-label{
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 768px){
+    .info-label{
+        font-size: calc(20px + (8 + 8 * 0.7) * ((100vw - 320) / 1280));
+    }
+    .game-session{
+        font-size:  calc(24px + (12 + 12 * 0.7) * ((100vw - 320) / 1280));
+        width: 95%;
+    }
+
+    .hist-label{
+        font-size: 26px;
+    }
+
+    .game-label{
+        font-size: 20px;
+    }
+
+    .date-label{
+        font-size: 20px;
+    }
+
+    .user-logo{
+        width: 160px;
+        height: 160px;
+    }
 }

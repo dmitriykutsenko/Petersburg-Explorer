@@ -1,90 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script>
-            ymaps.ready(function () {
-                // Для начала проверим, поддерживает ли плеер браузер пользователя.
-                if (!ymaps.panorama.isSupported()) {
-                    // Если нет, то просто ничего не будем делать.
-                    return;
-                }
 
-                // Ищем панораму в переданной точке.
-                ymaps.panorama.locate([{{ x }}, {{ y }}]).done(
-                    function (panoramas) {
-                        // Убеждаемся, что найдена хотя бы одна панорама.
-                        if (panoramas.length > 0) {
-                            // Создаем плеер с одной из полученных панорам.
-                            window.player = new ymaps.panorama.Player(
-                                'player1',
-                                // Панорамы в ответе отсортированы по расстоянию
-                                // от переданной в panorama.locate точки. Выбираем первую,
-                                // она будет ближайшей.
-                                panoramas[0],
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        ymaps.ready(function () {
+            // Для начала проверим, поддерживает ли плеер браузер пользователя.
+            if (!ymaps.panorama.isSupported()) {
+                // Если нет, то просто ничего не будем делать.
+                return;
+            }
 
-                                // Зададим направление взгляда, отличное от значения
-                                // по умолчанию.
-                                {
-                                    direction: [256, 16],
-                                    controls: []
-                                }
-                            );
+            // Ищем панораму в переданной точке.
+            ymaps.panorama.locate([{{ x }}, {{ y }}]).done(
+                function (panoramas) {
+                    // Убеждаемся, что найдена хотя бы одна панорама.
+                    if (panoramas.length > 0) {
+                        // Создаем плеер с одной из полученных панорам.
+                        window.player = new ymaps.panorama.Player(
+                            'player1',
+                            // Панорамы в ответе отсортированы по расстоянию
+                            // от переданной в panorama.locate точки. Выбираем первую,
+                            // она будет ближайшей.
+                            panoramas[0],
+
+                            // Зададим направление взгляда, отличное от значения
+                            // по умолчанию.
+                            {
+                                direction: [256, 16],
+                                controls: []
+                            }
+                        );
+                        window.panorama = player.getPanorama();
+                        player.events.add('panoramachange', function () {
                             window.panorama = player.getPanorama();
-                            player.events.add('panoramachange', function () {
-                                window.panorama = player.getPanorama();
-                            });
-                        }
-                    },
-                    function (error) {
-                        alert(error.message);
+                        });
                     }
-                );
+                },
+                function (error) {
+                    alert(error.message);
+                }
+            );
             });
 
-            function getCoordinates() {
-                const coordinates = JSON.stringify({
-                    "x": panorama.getPosition()[0],
-                    "y": panorama.getPosition()[1]
-                });
+        function getCoordinates() {
+            const coordinates = JSON.stringify({
+                "x": panorama.getPosition()[0],
+                "y": panorama.getPosition()[1]
+            });
 
-                $.ajax({
-                    url: "/game/",
-                    type: "PUT",
-                    dataType: "json",
-                    data: coordinates
-                });
-            }
-        </script>
-    </head>
+            $.ajax({
+                url: "/game/",
+                type: "PUT",
+                dataType: "json",
+                data: coordinates
+            });
+        }
+    </script>
+</head>
 
-    <body>
-    <div class="wrap_for_panorama">
-        <div class="game_status">
-            <div class="round">
-                Раунд
+<body>
+    <div class="wrap-for-panorama">
+        <div class="game-info">
+            <div class="destination">
+                <div class="destination-name">
+                    {{ destination }}
+                </div>
             </div>
-            <div class="round_number">
-                {{ round }}
-            </div>
-        </div>
-        <div class="destination">
-            <div class="destination_name">
-                {{ destination }}
+            <div class="game-status">
+                <div class="round">
+                    Раунд
+                </div>
+                <div class="round-number">
+                    {{ round }} / 4
+                </div>
             </div>
         </div>
         <div id="player1" class="player"></div>
-        <form>
+        <form class="complete-form">
             <button type="submit" id="complete_btn" onclick="getCoordinates()" formmethod="post"
-                    class="btn btn-success complete_round pull-right">
+                class="btn btn-success complete-round pull-right">
                 <i class="fas fa-check-square"></i>
                 Завершить раунд
             </button>
         </form>
+
+
     </div>
 
-    </body>
+</body>
 {% endblock %}
-
-

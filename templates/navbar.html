@@ -1,0 +1,69 @@
+<head>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+
+<nav>
+    <input type="checkbox" id="show-search">
+    <input type="checkbox" id="show-menu">
+    <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
+    <div class="logo"><a href="/">
+            <img src="../static/img/logo.png" alt="" width="60" height="60">
+        </a></div>
+    <div class="content">
+
+        <ul class="links">
+            <!--<li><a href="/">Главная</a></li>-->
+            {% if not current_user.is_authenticated %}
+            <li class="signup">
+                <a href="/signup">Sign up</a>
+            </li>
+            {% endif %}
+            <li class="social-menu">
+                <div class="social-menu-element">
+                    <a href="https://vk.com/petersburgexplorer">
+                        <i class="fab fa-vk"></i>
+                    </a>
+                </div>
+                <div class="social-menu-element">
+                    <a href="https://t.me/peterburgexplorer_bot">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                </div>
+                <div class="social-menu-element">
+                    <a href="/info/">
+                        <i class="fas fa-info-circle"></i>
+                    </a>
+                </div>
+            </li>
+            {% if current_user.is_authenticated %}
+            <li class="profile">
+                <a href="#" class="desktop-link">
+                    <i class="fas fa-user-circle"></i>
+                    {{ current_user.name }}
+                </a>
+                <input type="checkbox" id="show-features">
+                <label for="show-features">
+                    <i class="fas fa-user-circle"></i>
+                    {{ current_user.name }}
+                </label>
+                <ul class="dropdown">
+                    <li><a href="/profile">Профиль</a></li>
+
+                    <li><a href="/logout">Выйти</a></li>
+                </ul>
+            </li>
+
+            {% else %}
+            <li class="login">
+                <a href="/login">Log in</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <label for="show-search" class="search-icon"><i class="fas fa-search"></i></label>
+    <form method="POST" action="/search" class="search-box">
+        <input type="text" placeholder="Поиск..." name="searched" required>
+        <button type="submit" class="go-icon"><i class="fas fa-long-arrow-alt-right"></i></button>
+    </form>
+</nav>
