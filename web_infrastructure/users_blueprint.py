@@ -16,7 +16,7 @@ from forms.search import SearchForm
 logging.basicConfig(level=logging.INFO, filename='logs.log',
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
-blueprint = Blueprint(__name__, 'users_blueprint', template_folder='templates')
+blueprint = Blueprint('users_blueprint', __name__, template_folder='templates')
 
 
 @blueprint.route("/signup", methods=['GET', 'POST'])
@@ -72,7 +72,8 @@ def email_verification():
                 db_sess.add(user)
                 db_sess.commit()
 
-                logging.info('ADDED A NEW USER: name={}, email={}'.format(user.name, user.email))
+                logging.info('ADDED A NEW USER: name={}, email={}'.format(
+                    user.name, user.email))
 
                 return redirect('/login')
 
