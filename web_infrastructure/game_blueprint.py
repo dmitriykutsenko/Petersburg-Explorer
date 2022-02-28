@@ -12,7 +12,7 @@ from score_scripts.parsers import parse_destination_coordinates
 from score_scripts.parsers import toIntParser
 from score_scripts.score_count import count_score
 
-blueprint = Blueprint(__name__, 'game_blueprint', template_folder='templates')
+blueprint = Blueprint('game_blueprint', __name__, template_folder='templates')
 logging.basicConfig(level=logging.INFO, filename='gamesession.log',
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 

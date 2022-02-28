@@ -1,0 +1,19 @@
+
+
+.box-row {
+    padding: 16px;
+    margin-top: -1px;
+    list-style-type: none;
+    border-top-color: var(--color-border-muted);
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+.searched__users{
+    display: inline-flex;
+    font-size: 25px;
+}
+
+.searched__label{
+    font-size: calc(20px + 10 * (100vw / 1280));
+}

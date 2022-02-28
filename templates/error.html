@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="alert alert-warning" align="center" role="alert">
-    <img src="../static/img/error.png" alt="" width="50" height="50">
-    Произошла неизвестная ошибка
-    <img src="../static/img/error.png" alt="" width="50" height="50">
+<div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="alert alert-warning" align="center" role="alert">
+        <img src="../static/img/error.png" alt="" width="50" height="50">
+        Произошла неизвестная ошибка
+        <img src="../static/img/error.png" alt="" width="50" height="50">
+    </div>
+    <div align="center"><b>Искренне просим у вас за это прощения.</b></div>
+    <div align="center"><b>Мы обязательно это исправим.</b></div>
+    <a href="/" class="btn btn-outline-dark">
+        Вернуться в главное меню
+    </a>
 </div>
-<div align="center"><b>Искренне просим у вас за это прощения.</b></div>
-<div align="center"><b>Мы обязательно это исправим.</b></div>
-<a href="/" class="btn btn-outline-dark play_button"
-   style="position: absolute; left: calc(50% - 110px); margin-top: 10px;">
-    Вернуться в главное меню
-</a>
-
 {% endblock %}

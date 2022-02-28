@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="../static/css/search.css" type="text/css">
+</head>
+
+<div class="container">
+    {% if users %}
+    <div class="searched__label">Найдено по запросу: <em>{{ searched }}</em></div>
+    <br>
+    <div class="col-12 col-md-9 float-left px-2 pt-3 pt-md-0 searched__users">
+
+        {% for user in users%}
+        <div class="d-flex box-row px-0 ">
+            <div class="flex-shrink-1 mr-2">
+                <img src="../static/img/user.png" alt="..." width="30px" height="30px">
+            </div>
+            <div>
+                <a href="/users/{{user.name}}">{{user.name}}</a>
+            </div>
+
+        </div>
+        {%endfor%}
+
+    </div>
+
+    {% else %}
+    <div class="searched__label">По запросу <em>{{ searched }}</em> ничего не найдено...</div>
+
+    {% endif %}
+</div>
+{% endblock %}
