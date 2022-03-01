@@ -86,3 +86,9 @@
         height: 160px;
     }
 }
+
+@media screen and (max-width:360px){
+    .game-session{
+        font-size: 13px;
+    }
+}
