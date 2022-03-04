@@ -11,13 +11,15 @@
     <div class="user-info">
         <img class="user-logo" src="../static/img/user.png" alt="..." width="230" height="230">
         <div class="info-label">Имя: {{ user.name }}</div>
+        {% if user.id == current_user.id %}
         <div class="info-label">Почта: {{ user.email }}</div>
+        {% endif %}
         <div class="info-label">С нами с {{ user.created_date }}</div>
     </div>
     <div class="game-history">
         <div class="hist-label">
             История игр
-            {%if current_user.is_authenticated and user.id == current_user.id%}
+            {% if current_user.is_authenticated and user.id == current_user.id %}
             <a href="/delete_history"><button type="button" class="btn btn-outline-danger"
                     formmethod="post">Очистить</button></a>
             {% endif %}
