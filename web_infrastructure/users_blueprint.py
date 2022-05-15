@@ -24,6 +24,14 @@ def register():
     try:
         form = RegisterForm()
         if form.validate_on_submit():
+            if len(form.name.data) < 3:
+                return render_template('register.html', title='Регистрация',
+                                       form=form,
+                                       message=f"Слишком короткое имя пользователя ({len(form.name.data)} < 3)")
+            if len(form.name.data) > 9:
+                return render_template('register.html', title='Регистрация',
+                                       form=form,
+                                       message=f"Слишком длиное имя пользователя ({len(form.name.data)} > 9)")
             if form.password.data != form.password_again.data:
                 return render_template('register.html', title='Регистрация',
                                        form=form,
@@ -66,6 +74,7 @@ def email_verification():
             if session['Verification Code'] == form.code.data:
                 user = User(
                     name=session['User Nickname'],
+                    lower_name=session['User Nickname'].lower(),
                     email=session['User Email']
                 )
                 user.set_password(session['User Password'])
@@ -156,7 +165,6 @@ def logout():
 @blueprint.route('/users/<username>')
 def view_user(username):
     try:
-
         db_sess = db_session.create_session()
 
         user = db_sess.query(User).filter(
