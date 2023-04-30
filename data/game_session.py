@@ -14,47 +14,47 @@ class GameSession(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
 
-    destinationCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    destination_coordinates_list = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    finishCoordinatesList = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    finish_coordinates_list = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     date = sqlalchemy.Column(sqlalchemy.Date, nullable=True, default=datetime.datetime.now)
-    totalScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    total_score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
     round = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
-    firstRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    secondRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    thirdRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    fourthRoundScore = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    first_round_score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    second_round_score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    third_round_score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    fourth_round_score = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
     def __init__(self):
         self.round = 1
-        self.totalScore = 0
-        self.finishCoordinatesList = ""
-        self.destinationCoordinatesList = ""
+        self.total_score = 0
+        self.finish_coordinates_list = ""
+        self.destination_coordinates_list = ""
 
-    def setRoundScore(self, roundNumber, score):
-        if roundNumber == 1:
-            self.firstRoundScore = score
-        if roundNumber == 2:
-            self.secondRoundScore = score
-        if roundNumber == 3:
-            self.thirdRoundScore = score
-        if roundNumber == 4:
-            self.fourthRoundScore = score
+    def set_round_score(self, round_number, score):
+        if round_number == 1:
+            self.first_round_score = score
+        if round_number == 2:
+            self.second_round_score = score
+        if round_number == 3:
+            self.third_round_score = score
+        if round_number == 4:
+            self.fourth_round_score = score
 
-    def setRound(self, round):
+    def set_round(self, round):
         self.round = round
 
-    def setScore(self, score):
-        self.totalScore = score
+    def set_score(self, score):
+        self.total_score = score
 
-    def setDestinationCoordinates(self, coordinates):
-        self.destinationCoordinatesList = coordinates
+    def set_destination_coordinates(self, coordinates):
+        self.destination_coordinates_list = coordinates
 
-    def setFinishCoordinates(self, coordinates):
-        self.finishCoordinatesList = coordinates
+    def set_finish_coordinates(self, coordinates):
+        self.finish_coordinates_list = coordinates
 
-    def setUser_id(self, id):
+    def set_user_id(self, id):
         self.user_id = id

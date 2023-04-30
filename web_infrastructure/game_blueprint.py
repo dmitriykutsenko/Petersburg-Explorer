@@ -9,7 +9,7 @@ from data.game_session import GameSession
 from score_scripts.get_panoramas_data import get_panoramas_data
 from score_scripts.parsers import parse_coordinates
 from score_scripts.parsers import parse_destination_coordinates
-from score_scripts.parsers import toIntParser
+from score_scripts.parsers import to_int_parser
 from score_scripts.score_count import count_score
 
 blueprint = Blueprint('game_blueprint', __name__, template_folder='templates')
@@ -22,14 +22,14 @@ def index():
     try:
         db_sess = db_session.create_session()
 
-        gameSession = GameSession()
+        game_session = GameSession()
 
-        db_sess.add(gameSession)
+        db_sess.add(game_session)
         db_sess.commit()
 
         db_sess = db_session.create_session()
-        gameSession = db_sess.query(GameSession).all()[-1]
-        session['sessionId'] = gameSession.id
+        game_session = db_sess.query(GameSession).all()[-1]
+        session['sessionId'] = game_session.id
         logging.info("STARTED A NEW GAMESESSION (id = {})".format(str(session['sessionId'])))
 
         return render_template('start.html')
@@ -44,14 +44,14 @@ def game_screen():
     if request.method == 'GET':
         try:
             db_sess = db_session.create_session()
-            gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
+            game_session = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
-            currentRound = gameSession.round
-            if str(currentRound) == '5':
+            current_round = game_session.round
+            if str(current_round) == '5':
                 logging.info("REDIRECTED GAMESESSION (id = {}) TO FINISH SCREEN".format(str(session['sessionId'])))
                 return redirect('/finish_game/')
 
-            if int(currentRound) > 5:
+            if int(current_round) > 5:
                 logging.fatal("GAMESESSION's ROUND NUMBER BECAME MORE THAN 5")
                 return render_template('error.html')
 
@@ -62,7 +62,7 @@ def game_screen():
             start_coordinates = (panoramas_dict[list(panoramas_dict.keys())[ind1]][0],
                                  panoramas_dict[list(panoramas_dict.keys())[ind1]][1])
 
-            db_dest_coordinates = gameSession.destinationCoordinatesList.split(";")
+            db_dest_coordinates = game_session.destination_coordinates_list.split(";")
 
             dest_coordinates = " ".join(
                 parse_coordinates(
@@ -76,7 +76,7 @@ def game_screen():
 
             db_dest_coordinates.append(dest_coordinates)
 
-            gameSession.setDestinationCoordinates(";".join(db_dest_coordinates))
+            game_session.set_destination_coordinates(";".join(db_dest_coordinates))
 
             db_sess.commit()
 
@@ -87,7 +87,7 @@ def game_screen():
                                    destination=list(panoramas_dict.keys())[ind2],
                                    x=start_coordinates[0],
                                    y=start_coordinates[1],
-                                   round=currentRound)
+                                   round=current_round)
 
         except Exception:
             logging.fatal('ERROR OCCURED IN GET HANDLER')
@@ -98,16 +98,16 @@ def game_screen():
             response = request.get_data().decode()[1:-1].replace('"x":', ""). \
                 replace(',"y"', '').replace(".", "").split(":")
             db_sess = db_session.create_session()
-            gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
+            game_session = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
-            db_finish_coordinates = gameSession.finishCoordinatesList.split(";")
+            db_finish_coordinates = game_session.finish_coordinates_list.split(";")
             db_finish_coordinates.append(
                 " ".join(
                     parse_coordinates(response)
                 )
             )
 
-            gameSession.setFinishCoordinates(";".join(db_finish_coordinates))
+            game_session.set_finish_coordinates(";".join(db_finish_coordinates))
             db_sess.commit()
             logging.info("NEW DESTINATION COORDINATES WERE PUT CORRECTLY: {} {}".format(db_finish_coordinates[0],
                                                                                         db_finish_coordinates[1]))
@@ -120,14 +120,14 @@ def game_screen():
     elif request.method == "POST":
         try:
             db_sess = db_session.create_session()
-            gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
+            game_session = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
-            currentRound = gameSession.round
-            currentRound += 1
-            gameSession.setRound(currentRound)
+            current_round = game_session.round
+            current_round += 1
+            game_session.set_round(current_round)
 
             logging.info("GAMESESSIONS'S (id = {}) ROUND UPDATED TO {}".format(str(session['sessionId']),
-                                                                               str(currentRound)))
+                                                                               str(current_round)))
 
             db_sess.commit()
 
@@ -144,30 +144,30 @@ def finish():
     try:
         db_sess = db_session.create_session()
         db_sess.expire_on_commit = False
-        gameSession = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
+        game_session = db_sess.query(GameSession).filter(GameSession.id == session['sessionId']).first()
 
-        totalScore = 0
+        total_score = 0
 
-        finishCoordinates = gameSession.finishCoordinatesList.split(";")
-        destinationCoordinates = gameSession.destinationCoordinatesList.split(";")
+        finish_coordinates = game_session.finish_coordinates_list.split(";")
+        destination_coordinates = game_session.destination_coordinates_list.split(";")
 
         for i in range(1, 5):
-            thisFinishCoordinates = finishCoordinates[i]
-            thisDestinationCoordinates = destinationCoordinates[i]
+            this_finish_coordinates = finish_coordinates[i]
+            this_destination_coordinates = destination_coordinates[i]
 
-            plusScore = count_score(toIntParser(thisFinishCoordinates.split()),
-                                    toIntParser(thisDestinationCoordinates.split()))
-            gameSession.setRoundScore(i, plusScore)
-            totalScore += plusScore
+            plus_score = count_score(to_int_parser(this_finish_coordinates.split()),
+                                     to_int_parser(this_destination_coordinates.split()))
+            game_session.set_round_score(i, plus_score)
+            total_score += plus_score
 
-        gameSession.setUser_id(current_user.id)
-        gameSession.setScore(totalScore)
+        game_session.set_user_id(current_user.id)
+        game_session.set_score(total_score)
 
         db_sess.commit()
 
         logging.info("GAMESESSION (id = {}) FINISHED CORRECTLY".format(str(session['sessionId'])))
 
-        return render_template('endgame.html', score=totalScore)
+        return render_template('endgame.html', score=total_score)
 
     except Exception:
         logging.fatal('ERROR OCCURED DURING COUNTING TOTAL SCORE IN GAMESESSION (id = {})'

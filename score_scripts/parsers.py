@@ -13,6 +13,6 @@ def parse_coordinates(coordinates):
     return coordinates
 
 
-def toIntParser(coordinates):
+def to_int_parser(coordinates):
     coordinates = [int(elem) for elem in coordinates]
     return coordinates
