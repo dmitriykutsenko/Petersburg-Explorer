@@ -13,8 +13,8 @@ from forms.login import LoginForm
 from forms.register import RegisterForm
 from forms.search import SearchForm
 
-logging.basicConfig(level=logging.INFO, filename='logs.log',
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+# logging.basicConfig(level=logging.INFO, filename='logs.log',
+#                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 blueprint = Blueprint('users_blueprint', __name__, template_folder='templates')
 

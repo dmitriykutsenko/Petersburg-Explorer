@@ -1,8 +1,10 @@
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 from waitress import serve
 
+import os
 from data import db_session
 from data.user import User
 from forms.search import SearchForm
@@ -32,8 +34,11 @@ app.register_blueprint(game_blueprint.blueprint)
 
 
 def main():
+    file_path = os.path.abspath(os.getcwd()) + "/db/Petersburg.db"
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + file_path
+    db = SQLAlchemy(app)
     load_dotenv(dotenv_path='data/.env')
-    db_session.global_init('db/Petersburg.db')
     serve(app, host='0.0.0.0', port=5000)
     # app.run(host='127.0.0.1', port=8888)
 

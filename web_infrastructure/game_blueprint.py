@@ -13,8 +13,8 @@ from score_scripts.parsers import toIntParser
 from score_scripts.score_count import count_score
 
 blueprint = Blueprint('game_blueprint', __name__, template_folder='templates')
-logging.basicConfig(level=logging.INFO, filename='gamesession.log',
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+# logging.basicConfig(level=logging.INFO, filename='gamesession.log',
+#                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 
 @blueprint.route("/")
