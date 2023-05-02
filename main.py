@@ -34,13 +34,10 @@ app.register_blueprint(game_blueprint.blueprint)
 
 
 def main():
-    file_path = os.path.abspath(os.getcwd()) + "/db/Petersburg.db"
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + file_path
-    db = SQLAlchemy(app)
     load_dotenv(dotenv_path='data/.env')
-    serve(app, host='0.0.0.0', port=5000)
-    # app.run(host='127.0.0.1', port=8888)
+    db_session.global_init('db/Petersburg.db')
+    # serve(app, host='0.0.0.0', port=5000)
+    app.run(host='127.0.0.1', port=8888)
 
 if __name__ == '__main__':
     main()
