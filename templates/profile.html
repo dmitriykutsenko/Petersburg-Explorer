@@ -29,11 +29,11 @@
         <span class="game-label">Игра № {{ loop.revindex }}</span> <span class="date-label">({{ item.date }})</span>
         <div class="game-session">
 
-            <div class="game-session-element">Раунд-1 <br> {{item.firstRoundScore}}</div>
-            <div class="game-session-element">Раунд-2 <br> {{item.secondRoundScore}}</div>
-            <div class="game-session-element">Раунд-3 <br> {{item.thirdRoundScore}}</div>
-            <div class="game-session-element">Раунд-4 <br> {{item.fourthRoundScore}}</div>
-            <div class="game-session-element">Всего <br> {{ item.totalScore }}</div>
+            <div class="game-session-element">Раунд-1 <br> {{item.first_round_score}}</div>
+            <div class="game-session-element">Раунд-2 <br> {{item.second_round_score}}</div>
+            <div class="game-session-element">Раунд-3 <br> {{item.third_round_score}}</div>
+            <div class="game-session-element">Раунд-4 <br> {{item.fourth_round_score}}</div>
+            <div class="game-session-element">Всего <br> {{ item.total_score }}</div>
 
         </div>
         {% endfor %}
